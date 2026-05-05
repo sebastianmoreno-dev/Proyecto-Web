@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Propiedad - EstateArch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <header class="navbar">
+        <div class="logo">Estate<span>Arch</span></div>
+        <nav class="nav-links">
+            <a href="index.html">Propiedades</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Contacto</a>
+            <a href="nueva-propiedad.html" class="active-underline">Vender Propiedad</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="auth.html" class="login-link">Registrarse / Iniciar Sesión</a>
+            <button class="btn btn-primary">Publicar</button>
+        </div>
+    </header>
+
+    <main class="container page-content">
+        <div class="page-header">
+            <h1 class="page-title">Nueva Propiedad</h1>
+            <p class="page-subtitle">Complete los detalles arquitectónicos y espaciales de su inmueble.</p>
+        </div>
+
+        <div class="layout-grid">
+            <div class="left-column">
+                <section class="card form-section">
+                    <div class="section-header-flex">
+                        <h2>Galería Visual</h2>
+                        <span class="requirement-text">MÍNIMO 5 FOTOS</span>
+                    </div>
+                    
+                    <div class="upload-zone">
+                        <i class="fa-solid fa-camera-retro"></i>
+                        <p><strong>Arrastre sus imágenes aquí</strong></p>
+                        <p class="text-muted">O haga clic para explorar sus archivos</p>
+                    </div>
+
+                    <div class="thumbnails-grid">
+                        <div class="thumbnail filled">
+                            <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=300&q=80" alt="Preview">
+                            <button class="remove-btn"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="thumbnail empty"><i class="fa-regular fa-image"></i></div>
+                        <div class="thumbnail empty"><i class="fa-regular fa-image"></i></div>
+                        <div class="thumbnail empty"><i class="fa-regular fa-image"></i></div>
+                    </div>
+                </section>
+
+                <section class="card form-section">
+                    <h2>Especificaciones Generales</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label>TÍTULO DE LA PUBLICACIÓN</label>
+                            <input type="text" class="form-control" placeholder="Ej: Residencia Moderna en Los Olivos">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>TIPO DE PROPIEDAD</label>
+                            <select class="form-control">
+                                <option>Casa Unifamiliar</option>
+                                <option>Departamento</option>
+                                <option>Terreno</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>PRECIO (USD)</label>
+                            <div class="input-with-icon">
+                                <span>$</span>
+                                <input type="number" class="form-control" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>ÁREA TOTAL (m²)</label>
+                            <input type="number" class="form-control" placeholder="0">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>HABITACIONES</label>
+                            <div class="counter-input">
+                                <button type="button">-</button>
+                                <input type="number" value="0" readonly>
+                                <button type="button">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>DESCRIPCIÓN ARQUITECTÓNICA</label>
+                        <textarea class="form-control" rows="5" placeholder="Describa los materiales, acabados y entorno de la propiedad..."></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <div class="right-column">
+                <section class="card form-section">
+                    <div class="section-header-flex">
+                        <h2>Ubicación</h2>
+                        <i class="fa-solid fa-location-dot text-green"></i>
+                    </div>
+                    <div class="form-group">
+                        <label>DIRECCIÓN EXACTA</label>
+                        <input type="text" class="form-control" placeholder="Calle, Número, Ciudad">
+                    </div>
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <div class="map-pin"><i class="fa-solid fa-house"></i></div>
+                        </div>
+                        <div class="map-info">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <p>Mueva el pin para ajustar la ubicación exacta en el mapa.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card summary-card">
+                    <h2>Resumen de Publicación</h2>
+                    
+                    <ul class="summary-list">
+                        <li><span>Visibilidad</span><strong>Premium</strong></li>
+                        <li><span>Costo por listado</span><strong>$0.00 (Gratis)</strong></li>
+                        <li><span>Días activo</span><strong>30 días</strong></li>
+                    </ul>
+
+                    <button class="btn btn-white w-100">Publicar Ahora <i class="fa-solid fa-rocket"></i></button>
+                    <button class="btn btn-outline-white w-100">Guardar como Borrador</button>
+                    
+                    <p class="terms-text">Al publicar, usted acepta nuestros Términos de Servicio y Políticas de Privacidad.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="logo">Estate<span>Arch</span></div>
+                <p>© 2026 ESTATEARCH HERITAGE REALTY.<br>ARQUITECTÓNICAMENTE SÓLIDO.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">POLÍTICA DE PRIVACIDAD</a>
+                <a href="#">INFORMES DE MERCADO</a>
+                <a href="#">TÉRMINOS DE SERVICIO</a>
+                <a href="#">CONTACTO</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

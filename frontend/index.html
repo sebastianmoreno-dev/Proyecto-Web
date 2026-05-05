@@ -2,12 +2,166 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inmobiliaria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateArch - Inicio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<h1>Bienvenido a la inmobiliaria 🏡</h1>
+    <header class="navbar">
+        <div class="logo">Estate<span>Arch</span></div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Propiedades</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Contacto</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="nueva-propiedad.html" class="sell-link">Vender Propiedad</a>
+            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
+        </div>
+    </header>
 
-<script src="src/main.js"></script>
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Arquitectónicamente Sólido.<br><span class="text-green">Excepcionalmente Tuyo.</span></h1>
+            <p>Descubre una curaduría exclusiva de propiedades donde la excelencia estructural se encuentra con el diseño de vanguardia.</p>
+        </div>
+
+        <div class="search-bar">
+            <div class="search-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div class="search-text">
+                    <span class="label">UBICACIÓN</span>
+                    <input type="text" placeholder="¿Dónde quieres vivir?">
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="search-item">
+                <i class="fa-solid fa-house"></i>
+                <div class="search-text">
+                    <span class="label">TIPO</span>
+                    <select>
+                        <option>Residencial</option>
+                        <option>Comercial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="search-item">
+                <i class="fa-solid fa-money-bill"></i>
+                <div class="search-text">
+                    <span class="label">RANGO DE PRECIO</span>
+                    <select>
+                        <option>$500k - $1M</option>
+                        <option>$1M - $3M</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-search"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+        </div>
+    </section>
+
+    <section class="properties">
+        <div class="section-header">
+            <div>
+                <p class="subtitle">SELECCIÓN ELITE</p>
+                <h2>Propiedades Destacadas</h2>
+            </div>
+            <a href="#" class="view-all">Ver todas las propiedades <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card-prop">
+                <div class="card-image">
+                    <span class="badge">DESTACADO</span>
+                    <button class="btn-heart"><i class="fa-solid fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Casa Blanca">
+                </div>
+                <div class="card-content">
+                    <h3 class="price">$2,450,000</h3>
+                    <p class="location"><i class="fa-solid fa-location-dot"></i> Polanco, Ciudad de México</p>
+                    <div class="amenities">
+                        <span><i class="fa-solid fa-bed"></i> 4</span>
+                        <span><i class="fa-solid fa-bath"></i> 5</span>
+                        <span><i class="fa-solid fa-ruler-combined"></i> 420 m²</span>
+                    </div>
+                    <button class="btn btn-outline">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="card-prop">
+                <div class="card-image">
+                    <span class="badge">NUEVO</span>
+                    <button class="btn-heart"><i class="fa-solid fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80" alt="Interior Casa">
+                </div>
+                <div class="card-content">
+                    <h3 class="price">$1,890,000</h3>
+                    <p class="location"><i class="fa-solid fa-location-dot"></i> Antigua Guatemala, SAC</p>
+                    <div class="amenities">
+                        <span><i class="fa-solid fa-bed"></i> 3</span>
+                        <span><i class="fa-solid fa-bath"></i> 3</span>
+                        <span><i class="fa-solid fa-ruler-combined"></i> 310 m²</span>
+                    </div>
+                    <button class="btn btn-outline">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="card-prop">
+                <div class="card-image">
+                    <button class="btn-heart"><i class="fa-solid fa-heart"></i></button>
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80" alt="Cocina Moderna">
+                </div>
+                <div class="card-content">
+                    <h3 class="price">$3,100,000</h3>
+                    <p class="location"><i class="fa-solid fa-location-dot"></i> Santa Fe, Ciudad de México</p>
+                    <div class="amenities">
+                        <span><i class="fa-solid fa-bed"></i> 5</span>
+                        <span><i class="fa-solid fa-bath"></i> 6</span>
+                        <span><i class="fa-solid fa-ruler-combined"></i> 580 m²</span>
+                    </div>
+                    <button class="btn btn-outline">Ver Detalles</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="expertise">
+        <div class="expertise-image">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80" alt="Agente mostrando casa">
+        </div>
+        <div class="expertise-text">
+            <h2>Expertise en Arquitectura & Mercado</h2>
+            <p>En EstateArch, no solo vendemos casas; curamos espacios que resisten la prueba del tiempo. Nuestra evaluación de propiedades incluye un análisis estructural y arquitectónico riguroso para garantizar tu inversión.</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>15+</h3>
+                    <p>AÑOS DE HERENCIA</p>
+                </div>
+                <div class="stat-item">
+                    <h3>500+</h3>
+                    <p>JOYAS VENDIDAS</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="logo">Estate<span>Arch</span></div>
+                <p>© 2026 ESTATEARCH HERITAGE REALTY.<br>ARQUITECTÓNICAMENTE SÓLIDO.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">POLÍTICA DE PRIVACIDAD</a>
+                <a href="#">INFORMES DE MERCADO</a>
+                <a href="#">TÉRMINOS DE SERVICIO</a>
+                <a href="#">CONTACTO</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
