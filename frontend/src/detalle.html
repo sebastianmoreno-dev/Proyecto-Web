@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Propiedad - EstateArch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <header class="navbar">
+        <div class="logo">Estate<span>Arch</span></div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Propiedades</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="nuevaPropiedad.html" class="sell-link">Vender Propiedad</a>
+            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
+        </div>
+    </header>
+
+    <main class="container page-content">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <a href="index.html">Propiedades</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Residencia en Polanco</span>
+        </div>
+
+        <!-- Galería -->
+        <div class="gallery-grid">
+            <div class="gallery-main">
+                <img id="main-img" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" alt="Foto principal">
+                <span class="badge badge-detail">DESTACADO</span>
+            </div>
+            <div class="gallery-thumbs">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=400&q=80" alt="Foto 2" onclick="changeImg(this)">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&q=80" alt="Foto 3" onclick="changeImg(this)">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80" alt="Foto 4" onclick="changeImg(this)">
+                <div class="gallery-more" onclick="changeImg(this, 'https://images.unsplash.com/photo-1613490908676-e1ceb62eb8aa?w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1613490908676-e1ceb62eb8aa?w=400&q=80" alt="Foto 5">
+                    <span>+3 fotos</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout principal -->
+        <div class="detail-layout">
+
+            <!-- Columna izquierda -->
+            <div class="detail-left">
+
+                <div class="card">
+                    <div class="detail-title-row">
+                        <div>
+                            <h1 class="detail-title">Residencia Moderna en Polanco</h1>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> Polanco, Ciudad de México, México</p>
+                        </div>
+                        <button class="btn-heart-lg" onclick="toggleHeartDetail(this)">
+                            <i class="fa-solid fa-heart"></i> Guardar
+                        </button>
+                    </div>
+
+                    <div class="detail-amenities-row">
+                        <div class="amenity-box">
+                            <i class="fa-solid fa-bed"></i>
+                            <span class="amenity-num">4</span>
+                            <span class="amenity-label">Habitaciones</span>
+                        </div>
+                        <div class="amenity-box">
+                            <i class="fa-solid fa-bath"></i>
+                            <span class="amenity-num">5</span>
+                            <span class="amenity-label">Baños</span>
+                        </div>
+                        <div class="amenity-box">
+                            <i class="fa-solid fa-ruler-combined"></i>
+                            <span class="amenity-num">420</span>
+                            <span class="amenity-label">m² Total</span>
+                        </div>
+                        <div class="amenity-box">
+                            <i class="fa-solid fa-car"></i>
+                            <span class="amenity-num">2</span>
+                            <span class="amenity-label">Estacionamientos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="section-title-detail">Descripción</h2>
+                    <p class="detail-desc">Esta impresionante residencia en el corazón de Polanco combina arquitectura contemporánea con los más altos estándares de construcción. Diseñada por el reconocido estudio ArqFirm, cada espacio ha sido pensado para maximizar la luz natural y la fluidez entre ambientes.</p>
+                    <p class="detail-desc">Los acabados de primera categoría incluyen pisos de mármol importado, cocina integral de línea alemana, y ventanales de piso a techo con doble cristal. El jardín trasero cuenta con alberca infinity, asador y zona lounge.</p>
+                    <p class="detail-desc">Ubicada en una de las zonas más exclusivas de la ciudad, a pasos de los mejores restaurantes, boutiques y centros culturales de México.</p>
+                </div>
+
+                <div class="card">
+                    <h2 class="section-title-detail">Características</h2>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Alberca privada</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Jardín</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Seguridad 24/7</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Cocina equipada</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Aire acondicionado</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Terraza</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Estudio / Home office</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Bodega</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Área de servicio</div>
+                        <div class="feature-item"><i class="fa-solid fa-check"></i> Cuarto de servicio</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="section-title-detail">Ubicación</h2>
+                    <div class="map-container">
+                        <div class="map-placeholder" style="height: 250px;">
+                            <div class="map-pin"><i class="fa-solid fa-house"></i></div>
+                        </div>
+                        <div class="map-info">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <p>Polanco, Miguel Hidalgo, Ciudad de México, 11560</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="detail-right">
+
+                <div class="card price-card">
+                    <p class="price-label">PRECIO DE VENTA</p>
+                    <h2 class="detail-price">$2,450,000</h2>
+                    <p class="price-sub">USD · Precio negociable</p>
+                    <button class="btn btn-primary w-100 btn-large" style="margin-top: 20px;">
+                        <i class="fa-solid fa-calendar-check"></i> Agendar Visita
+                    </button>
+                    <button class="btn btn-outline w-100" style="margin-top: 0;">
+                        <i class="fa-solid fa-message"></i> Enviar Mensaje
+                    </button>
+                    <div class="price-features">
+                        <div class="pf-item"><i class="fa-solid fa-shield-halved"></i> Propiedad verificada</div>
+                        <div class="pf-item"><i class="fa-solid fa-file-contract"></i> Documentos legales listos</div>
+                        <div class="pf-item"><i class="fa-solid fa-handshake"></i> Negociación directa</div>
+                    </div>
+                </div>
+
+                <div class="card agent-card">
+                    <p class="agent-label">AGENTE RESPONSABLE</p>
+                    <div class="agent-info">
+                        <div class="agent-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="agent-name">Carlos Mendoza</h3>
+                            <p class="agent-role">Agente Senior · EstateArch</p>
+                        </div>
+                    </div>
+                    <div class="agent-stats">
+                        <div><strong>42</strong><span>Propiedades</span></div>
+                        <div><strong>8 años</strong><span>Experiencia</span></div>
+                    </div>
+                    <a href="contacto.html" class="btn btn-outline w-100" style="display:block; text-align:center; padding: 12px;">Contactar Agente</a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="logo">Estate<span>Arch</span></div>
+                <p>© 2026 ESTATEARCH HERITAGE REALTY.<br>ARQUITECTÓNICAMENTE SÓLIDO.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">POLÍTICA DE PRIVACIDAD</a>
+                <a href="#">INFORMES DE MERCADO</a>
+                <a href="#">TÉRMINOS DE SERVICIO</a>
+                <a href="contacto.html">CONTACTO</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function changeImg(el, src) {
+            const mainImg = document.getElementById('main-img');
+            mainImg.src = src || el.src;
+        }
+
+        function toggleHeartDetail(btn) {
+            btn.classList.toggle('saved');
+            if (btn.classList.contains('saved')) {
+                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Guardado';
+                btn.style.backgroundColor = '#FFE8E8';
+                btn.style.color = '#E74C3C';
+                btn.style.borderColor = '#E74C3C';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Guardar';
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }
+        }
+    </script>
+</body>
+</html>
