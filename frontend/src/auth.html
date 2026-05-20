@@ -25,11 +25,12 @@
                 <div class="logo mobile-logo">Estate<span>Arch</span></div>
 
                 <div class="auth-tabs">
-                    <button class="tab-btn active" onclick="switchTab('login')">Iniciar Sesión</button>
-                    <button class="tab-btn" onclick="switchTab('register')">Registrarse</button>
+                    <button class="tab-btn active" onclick="switchTab('login', this)">Iniciar Sesión</button>
+                    <button class="tab-btn" onclick="switchTab('register', this)">Registrarse</button>
                 </div>
 
-                <!-- FORMULARIO: LOGIN -->
+                <div id="auth-msg" style="display:none; padding:12px 15px; border-radius:6px; margin-bottom:15px; font-size:0.9rem;"></div>
+
                 <form id="login-form" class="auth-form">
                     <h3 class="auth-title">Bienvenido de nuevo</h3>
                     <p class="text-muted">Ingresa tus credenciales para acceder a tu cuenta.</p>
@@ -38,7 +39,7 @@
                         <label>CORREO ELECTRÓNICO</label>
                         <div class="input-with-icon">
                             <i class="fa-regular fa-envelope"></i>
-                            <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+                            <input type="email" id="login-correo" class="form-control" placeholder="ejemplo@correo.com">
                         </div>
                     </div>
                     
@@ -46,7 +47,7 @@
                         <label>CONTRASEÑA</label>
                         <div class="input-with-icon">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" placeholder="••••••••">
+                            <input type="password" id="login-password" class="form-control" placeholder="••••••••">
                         </div>
                     </div>
                     
@@ -57,10 +58,11 @@
                         <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
                     </div>
                     
-                    <button type="button" class="btn btn-primary w-100 btn-large">Iniciar Sesión</button>
+                    <button type="button" id="btn-login" class="btn btn-primary w-100 btn-large" onclick="iniciarSesion()">
+                        Iniciar Sesión
+                    </button>
                 </form>
 
-                <!-- FORMULARIO: REGISTRO -->
                 <form id="register-form" class="auth-form" style="display: none;">
                     <h3 class="auth-title">Crear una cuenta</h3>
                     <p class="text-muted">Únete a nuestra exclusiva red de propiedades.</p>
@@ -68,11 +70,11 @@
                     <div class="form-row mt-30">
                         <div class="form-group flex-1">
                             <label>NOMBRE</label>
-                            <input type="text" class="form-control" placeholder="Tu nombre">
+                            <input type="text" id="reg-nombre" class="form-control" placeholder="Tu nombre">
                         </div>
                         <div class="form-group flex-1">
                             <label>APELLIDO</label>
-                            <input type="text" class="form-control" placeholder="Tu apellido">
+                            <input type="text" id="reg-apellido" class="form-control" placeholder="Tu apellido">
                         </div>
                     </div>
                     
@@ -80,19 +82,29 @@
                         <label>CORREO ELECTRÓNICO</label>
                         <div class="input-with-icon">
                             <i class="fa-regular fa-envelope"></i>
-                            <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+                            <input type="email" id="reg-correo" class="form-control" placeholder="ejemplo@correo.com">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ROL</label>
+                        <select id="reg-rol" class="form-control">
+                            <option value="comprador">Comprador</option>
+                            <option value="vendedor">Vendedor</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
                         <label>CONTRASEÑA</label>
                         <div class="input-with-icon">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" placeholder="Crea una contraseña segura">
+                            <input type="password" id="reg-password" class="form-control" placeholder="Crea una contraseña segura">
                         </div>
                     </div>
                     
-                    <button type="button" class="btn btn-primary w-100 btn-large">Crear Cuenta</button>
+                    <button type="button" id="btn-registro" class="btn btn-primary w-100 btn-large" onclick="registrarse()">
+                        Crear Cuenta
+                    </button>
                     
                     <p class="terms-text mt-20" style="color: var(--text-gray);">
                         Al registrarte, aceptas nuestros <a href="#" class="text-green">Términos de Servicio</a> y <a href="#" class="text-green">Políticas de Privacidad</a>.
@@ -103,23 +115,6 @@
         </div>
     </div>
 
-    <script>
-        function switchTab(tabName) {
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-
-            if (tabName === 'login') {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            }
-        }
-    </script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

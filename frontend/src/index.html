@@ -9,18 +9,7 @@
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="logo">Estate<span>Arch</span></div>
-        <nav class="nav-links">
-            <a href="index.html" class="active">Propiedades</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-        <div class="nav-actions">
-            <a href="nuevaPropiedad.html" class="sell-link">Vender Propiedad</a>
-            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
-        </div>
-    </header>
+    <header class="navbar"></header>
 
     <section class="hero">
         <div class="hero-overlay"></div>
@@ -28,13 +17,12 @@
             <h1>Arquitectónicamente Sólido.<br><span class="text-green">Excepcionalmente Tuyo.</span></h1>
             <p>Descubre una curaduría exclusiva de propiedades donde la excelencia estructural se encuentra con el diseño de vanguardia.</p>
         </div>
-
-        <div class="search-bar">
+        <form class="search-bar" onsubmit="event.preventDefault(); cargarPropiedades();">
             <div class="search-item">
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="search-text">
                     <span class="label">UBICACIÓN</span>
-                    <input type="text" placeholder="¿Dónde quieres vivir?">
+                    <input type="text" id="filtro-ubicacion" placeholder="¿Dónde quieres vivir?">
                 </div>
             </div>
             <div class="divider"></div>
@@ -42,9 +30,11 @@
                 <i class="fa-solid fa-house"></i>
                 <div class="search-text">
                     <span class="label">TIPO</span>
-                    <select>
-                        <option>Residencial</option>
-                        <option>Comercial</option>
+                    <select id="filtro-tipo">
+                        <option value="">Todos</option>
+                        <option value="casa">Casa</option>
+                        <option value="departamento">Departamento</option>
+                        <option value="terreno">Terreno</option>
                     </select>
                 </div>
             </div>
@@ -52,15 +42,20 @@
             <div class="search-item">
                 <i class="fa-solid fa-money-bill"></i>
                 <div class="search-text">
-                    <span class="label">RANGO DE PRECIO</span>
-                    <select>
-                        <option>$500k - $1M</option>
-                        <option>$1M - $3M</option>
+                    <span class="label">PRECIO MÁXIMO</span>
+                    <select id="filtro-precio">
+                        <option value="">Cualquier precio</option>
+                        <option value="1000000">Hasta $1M</option>
+                        <option value="2000000">Hasta $2M</option>
+                        <option value="3000000">Hasta $3M</option>
+                        <option value="5000000">Hasta $5M</option>
                     </select>
                 </div>
             </div>
-            <button class="btn btn-search"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
-        </div>
+            <button type="submit" class="btn btn-search">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+            </button>
+        </form>
     </section>
 
     <section class="properties">
@@ -69,64 +64,12 @@
                 <p class="subtitle">SELECCIÓN ELITE</p>
                 <h2>Propiedades Destacadas</h2>
             </div>
-            <a href="#" class="view-all">Ver todas las propiedades <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#" class="view-all">Ver todas <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-
-        <div class="cards-grid">
-            <div class="card-prop">
-                <div class="card-image">
-                    <span class="badge">DESTACADO</span>
-                    <button class="btn-heart" onclick="toggleHeart(this)"><i class="fa-solid fa-heart"></i></button>
-                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Casa Blanca">
-                </div>
-                <div class="card-content">
-                    <h3 class="price">$2,450,000</h3>
-                    <p class="location"><i class="fa-solid fa-location-dot"></i> Polanco, Ciudad de México</p>
-                    <div class="amenities">
-                        <span><i class="fa-solid fa-bed"></i> 4</span>
-                        <span><i class="fa-solid fa-bath"></i> 5</span>
-                        <span><i class="fa-solid fa-ruler-combined"></i> 420 m²</span>
-                    </div>
-                    <br>
-                    <a href="detalle.html?id=1" class="btn btn-outline">Ver Detalles</a>
-                </div>
-            </div>
-
-            <div class="card-prop">
-                <div class="card-image">
-                    <span class="badge">NUEVO</span>
-                    <button class="btn-heart" onclick="toggleHeart(this)"><i class="fa-solid fa-heart"></i></button>
-                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80" alt="Interior Casa">
-                </div>
-                <div class="card-content">
-                    <h3 class="price">$1,890,000</h3>
-                    <p class="location"><i class="fa-solid fa-location-dot"></i> Antigua Guatemala, SAC</p>
-                    <div class="amenities">
-                        <span><i class="fa-solid fa-bed"></i> 3</span>
-                        <span><i class="fa-solid fa-bath"></i> 3</span>
-                        <span><i class="fa-solid fa-ruler-combined"></i> 310 m²</span>
-                    </div>
-                    <br>
-                    <a href="detalle.html?id=2" class="btn btn-outline">Ver Detalles</a>
-                </div>
-            </div>
-
-            <div class="card-prop">
-                <div class="card-image">
-                    <button class="btn-heart" onclick="toggleHeart(this)"><i class="fa-solid fa-heart"></i></button>
-                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80" alt="Cocina Moderna">
-                </div>
-                <div class="card-content">
-                    <h3 class="price">$3,100,000</h3>
-                    <p class="location"><i class="fa-solid fa-location-dot"></i> Santa Fe, Ciudad de México</p>
-                    <div class="amenities">
-                        <span><i class="fa-solid fa-bed"></i> 5</span>
-                        <span><i class="fa-solid fa-bath"></i> 6</span>
-                        <span><i class="fa-solid fa-ruler-combined"></i> 580 m²</span>
-                    </div>
-                    <br>
-                    <a href="detalle.html?id=3" class="btn btn-outline">Ver Detalles</a>
-                </div>
+        <div class="cards-grid" id="cards-grid">
+            <div style="text-align:center;padding:60px;color:var(--text-gray);grid-column:1/-1;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;margin-bottom:15px;display:block;"></i>
+                Cargando propiedades...
             </div>
         </div>
     </section>
@@ -139,14 +82,8 @@
             <h2>Expertise en Arquitectura & Mercado</h2>
             <p>En EstateArch, no solo vendemos casas; curamos espacios que resisten la prueba del tiempo. Nuestra evaluación de propiedades incluye un análisis estructural y arquitectónico riguroso para garantizar tu inversión.</p>
             <div class="stats">
-                <div class="stat-item">
-                    <h3>15+</h3>
-                    <p>AÑOS DE HERENCIA</p>
-                </div>
-                <div class="stat-item">
-                    <h3>500+</h3>
-                    <p>JOYAS VENDIDAS</p>
-                </div>
+                <div class="stat-item"><h3>15+</h3><p>AÑOS DE HERENCIA</p></div>
+                <div class="stat-item"><h3>500+</h3><p>JOYAS VENDIDAS</p></div>
             </div>
         </div>
     </section>
@@ -161,23 +98,16 @@
                 <a href="#">POLÍTICA DE PRIVACIDAD</a>
                 <a href="#">INFORMES DE MERCADO</a>
                 <a href="#">TÉRMINOS DE SERVICIO</a>
-                <a href="#">CONTACTO</a>
+                <a href="contacto.html">CONTACTO</a>
             </div>
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
+    <script src="js/index.js"></script>
     <script>
-        function toggleHeart(btn) {
-            btn.classList.toggle('active');
-            const icon = btn.querySelector('i');
-            if (btn.classList.contains('active')) {
-                btn.style.color = '#E74C3C';
-                btn.style.backgroundColor = '#FFE8E8';
-            } else {
-                btn.style.color = '';
-                btn.style.backgroundColor = '';
-            }
-        }
+        // Le pasamos 'propiedades' para que el enlace se marque como activo
+        renderNavbar('propiedades');
     </script>
 </body>
 </html>

@@ -67,23 +67,38 @@ a {
     padding: 20px 5%;
     background-color: var(--white);
     border-bottom: 1px solid #EAEAEA;
+    position: relative; /* 👈 SUPER IMPORTANTE: Permite el centrado absoluto */
+    height: 75px; /* Mantiene la barra del mismo tamaño siempre */
 }
 
 .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-green); }
 .logo span { color: var(--text-dark); }
 
-.nav-links { display: flex; gap: 30px; }
-.nav-links a { font-size: 0.9rem; color: var(--text-gray); }
-.nav-links a.active, .nav-links a:hover { color: var(--text-dark); font-weight: 600; }
-.active-underline { 
-    color: var(--primary-green) !important; 
-    font-weight: 600 !important; 
-    border-bottom: 2px solid var(--primary-green); 
-    padding-bottom: 25px; 
+/* 👇 ESTA ES LA NUEVA CLASE QUE SEPARA Y CENTRA TUS ENLACES */
+.nav-center { 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; 
+    gap: 50px; /* 👈 AQUÍ CONTROLAS LA SEPARACIÓN (Súbelo a 60px o 70px si quieres más) */
 }
 
+.nav-center a { 
+    font-size: 0.95rem; 
+    color: var(--text-gray); 
+    padding: 5px 10px; /* Hace que el área para dar clic sea más grande */
+    transition: all 0.3s ease;
+}
+
+.nav-center a.active, .nav-center a:hover { 
+    color: var(--text-dark); 
+    font-weight: 600; 
+}
+
+/* Acciones de la derecha (Botones) */
 .nav-actions { display: flex; align-items: center; gap: 20px; }
-.sell-link { font-size: 0.9rem; font-weight: 600; }
+.sell-link { font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
+.sell-link:hover { color: var(--primary-green); }
 .login-link { font-size: 0.9rem; color: var(--text-gray); margin-right: 15px; }
 
 /* ================= VISTA: INDEX (HERO Y PROPIEDADES) ================= */
@@ -372,4 +387,101 @@ footer { background-color: var(--bg-footer); padding: 40px 5%; margin-top: auto;
     .team-grid { grid-template-columns: 1fr; }
 
     .contact-layout { grid-template-columns: 1fr; }
+}
+/* ================= NAVBAR DINÁMICO POR ROL ================= */
+.nav-user { display: flex; align-items: center; gap: 8px; }
+.nav-nombre { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); }
+.badge-rol-nav { padding: 2px 9px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; }
+.badge-comprador { background: #D4EDDA; color: #155724; }
+.badge-vendedor  { background: #D1ECF1; color: #0C5460; }
+.badge-admin     { background: #FFF3CD; color: #856404; }
+.btn-sm-nav { padding: 7px 14px; font-size: 0.85rem; }
+
+/* ================= VISTA: PANEL ADMINISTRADOR ================= */
+.admin-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.admin-sidebar { background: var(--primary-green); padding: 30px 0; position: relative; }
+.admin-sidebar .logo { color: white; padding: 0 25px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+.admin-sidebar .logo span { color: #A8C2B3; }
+
+.sidebar-link { display: flex; align-items: center; gap: 12px; padding: 14px 25px; color: #A8C2B3; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+.sidebar-link:hover, .sidebar-link.active { background: rgba(255,255,255,0.1); color: white; }
+.sidebar-link i { width: 18px; }
+
+.admin-main { background: #F5F5F5; padding: 35px; }
+.admin-header { margin-bottom: 30px; }
+.admin-header h1 { font-size: 1.8rem; color: var(--text-dark); }
+.admin-header p { color: var(--text-gray); font-size: 0.9rem; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 35px; }
+.stat-card { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.stat-card .num { font-size: 2rem; font-weight: 700; color: var(--primary-green); }
+.stat-card .lbl { font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
+.stat-card i { font-size: 1.5rem; color: #A8C2B3; float: right; margin-top: -35px; }
+
+.panel { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: none; }
+.panel.active { display: block; }
+.panel h2 { font-size: 1.2rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #EAEAEA; }
+
+/* Tablas del Admin */
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { text-align: left; padding: 12px 15px; background: #F9F9F9; color: var(--text-gray); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; }
+td { padding: 14px 15px; border-bottom: 1px solid #F0F0F0; }
+
+.badge-rol { padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+.badge-rol.admin    { background: #FFF3CD; color: #856404; }
+.badge-rol.vendedor { background: #D1ECF1; color: #0C5460; }
+.badge-rol.comprador{ background: #D4EDDA; color: #155724; }
+
+.badge-estado { padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+.badge-estado.activa   { background: #D4EDDA; color: #155724; }
+.badge-estado.inactiva { background: #F8D7DA; color: #721C24; }
+.badge-estado.vendida  { background: #CCE5FF; color: #004085; }
+
+.btn-sm { padding: 5px 12px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; border: none; font-weight: 600; }
+.btn-danger { background: #F8D7DA; color: #721C24; }
+.btn-danger:hover { background: #F5C6CB; }
+.btn-warning { background: #FFF3CD; color: #856404; }
+select.inline { border: 1px solid #DCDCDC; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem; outline: none; }
+
+/* ================= PANEL VENDEDOR ================= */
+.panel-layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 70px); }
+.panel-sidebar { background: var(--primary-green); padding: 30px 0; }
+.sidebar-link { display: flex; align-items: center; gap: 12px; padding: 14px 25px; color: #A8C2B3; font-size: 0.9rem; cursor: pointer; transition: 0.2s; border: none; background: none; width: 100%; text-align: left; }
+.sidebar-link:hover, .sidebar-link.active { background: rgba(255,255,255,0.1); color: white; }
+.sidebar-link i { width: 18px; }
+.sidebar-user { padding: 20px 25px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+.sidebar-user .s-nombre { color: white; font-weight: 600; font-size: 1rem; }
+.sidebar-user .s-rol { color: #A8C2B3; font-size: 0.8rem; margin-top: 3px; }
+.panel-main { background: #F5F5F5; padding: 35px; }
+.panel-header { margin-bottom: 30px; }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+.stat-box { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.stat-box .num { font-size: 2rem; font-weight: 700; color: var(--primary-green); }
+.stat-box .lbl { font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
+.panel-section { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 25px; display: none; }
+.panel-section.active { display: block; }
+.prop-row { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #F5F5F5; }
+.prop-row img { width: 70px; height: 55px; object-fit: cover; border-radius: 6px; }
+.prop-row-precio { font-weight: 700; color: var(--primary-green); }
+.badge-estado-prop { padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+.badge-activa { background: #D4EDDA; color: #155724; }
+.badge-inactiva { background: #F8D7DA; color: #721C24; }
+.badge-vendida { background: #CCE5FF; color: #004085; }
+
+/* Ajusta el h2 que contiene al botón */
+.panel-section h2 { 
+    font-size: 1.2rem; 
+    margin-bottom: 20px; 
+    padding-bottom: 12px; 
+    border-bottom: 1px solid #EAEAEA; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; /* Permite que el botón baje si no cabe */
+    gap: 15px;       /* Crea espacio entre el título y el botón */
+}
+
+/* Asegura que el botón no se deforme */
+.panel-section h2 a.btn {
+    flex-shrink: 0; 
 }

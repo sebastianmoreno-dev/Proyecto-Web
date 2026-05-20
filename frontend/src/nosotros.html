@@ -9,20 +9,8 @@
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="logo">Estate<span>Arch</span></div>
-        <nav class="nav-links">
-            <a href="index.html">Propiedades</a>
-            <a href="nosotros.html" class="active">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-        <div class="nav-actions">
-            <a href="nuevaPropiedad.html" class="sell-link">Vender Propiedad</a>
-            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
-        </div>
-    </header>
+    <header class="navbar"></header>
 
-    <!-- Hero Nosotros -->
     <section class="about-hero">
         <div class="about-hero-overlay"></div>
         <div class="about-hero-content">
@@ -32,7 +20,6 @@
         </div>
     </section>
 
-    <!-- Misión y Visión -->
     <section class="about-mission container">
         <div class="mission-grid">
             <div class="mission-card">
@@ -53,7 +40,6 @@
         </div>
     </section>
 
-    <!-- Historia -->
     <section class="about-story">
         <div class="container">
             <div class="story-grid">
@@ -85,7 +71,6 @@
         </div>
     </section>
 
-    <!-- Equipo -->
     <section class="team-section container">
         <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 50px;">
             <div>
@@ -127,7 +112,6 @@
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="about-cta">
         <div class="about-cta-content">
             <h2>¿Listo para encontrar tu espacio ideal?</h2>
@@ -154,5 +138,10 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
+    <script>
+        // Le indicamos que el enlace activo es 'nosotros'
+        renderNavbar('nosotros');
+    </script>
 </body>
 </html>

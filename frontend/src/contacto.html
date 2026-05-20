@@ -9,18 +9,7 @@
 </head>
 <body class="bg-light">
 
-    <header class="navbar">
-        <div class="logo">Estate<span>Arch</span></div>
-        <nav class="nav-links">
-            <a href="index.html">Propiedades</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html" class="active">Contacto</a>
-        </nav>
-        <div class="nav-actions">
-            <a href="nuevaPropiedad.html" class="sell-link">Vender Propiedad</a>
-            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
-        </div>
-    </header>
+    <header class="navbar"></header>
 
     <main class="container page-content">
         <div class="page-header" style="text-align: center; max-width: 600px; margin: 0 auto 50px;">
@@ -31,7 +20,6 @@
 
         <div class="contact-layout">
 
-            <!-- Formulario -->
             <div class="contact-form-area card">
                 <h2 style="margin-bottom: 25px; font-size: 1.3rem;">Envíanos un mensaje</h2>
 
@@ -88,7 +76,6 @@
                 </div>
             </div>
 
-            <!-- Info de contacto -->
             <div class="contact-info-area">
 
                 <div class="contact-info-card card">
@@ -134,23 +121,11 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
+    <script src="js/contacto.js"></script>
     <script>
-        function sendMessage() {
-            const inputs = document.querySelectorAll('.form-control');
-            let valid = true;
-            inputs.forEach(input => {
-                if (!input.value.trim() && input.type !== 'tel') valid = false;
-            });
-            if (!valid) {
-                alert('Por favor completa todos los campos requeridos.');
-                return;
-            }
-            document.getElementById('success-msg').style.display = 'block';
-            inputs.forEach(input => input.value = '');
-            setTimeout(() => {
-                document.getElementById('success-msg').style.display = 'none';
-            }, 5000);
-        }
+        // Le pasamos 'contacto' para que lo subraye como activo
+        renderNavbar('contacto');
     </script>
 </body>
 </html>

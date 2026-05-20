@@ -9,22 +9,10 @@
 </head>
 <body class="bg-light">
 
-    <header class="navbar">
-        <div class="logo">Estate<span>Arch</span></div>
-        <nav class="nav-links">
-            <a href="index.html" class="active">Propiedades</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-        <div class="nav-actions">
-            <a href="nuevaPropiedad.html" class="sell-link">Vender Propiedad</a>
-            <a href="auth.html" class="btn btn-primary">Registrarse / Iniciar Sesión</a>
-        </div>
-    </header>
+    <header class="navbar"></header>
 
     <main class="container page-content">
 
-        <!-- Breadcrumb -->
         <div class="breadcrumb">
             <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
             <i class="fa-solid fa-chevron-right"></i>
@@ -33,7 +21,6 @@
             <span>Residencia en Polanco</span>
         </div>
 
-        <!-- Galería -->
         <div class="gallery-grid">
             <div class="gallery-main">
                 <img id="main-img" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80" alt="Foto principal">
@@ -50,10 +37,8 @@
             </div>
         </div>
 
-        <!-- Layout principal -->
         <div class="detail-layout">
 
-            <!-- Columna izquierda -->
             <div class="detail-left">
 
                 <div class="card">
@@ -129,7 +114,6 @@
 
             </div>
 
-            <!-- Columna derecha -->
             <div class="detail-right">
 
                 <div class="card price-card">
@@ -187,26 +171,11 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
+    <script src="js/detalle.js"></script>
     <script>
-        function changeImg(el, src) {
-            const mainImg = document.getElementById('main-img');
-            mainImg.src = src || el.src;
-        }
-
-        function toggleHeartDetail(btn) {
-            btn.classList.toggle('saved');
-            if (btn.classList.contains('saved')) {
-                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Guardado';
-                btn.style.backgroundColor = '#FFE8E8';
-                btn.style.color = '#E74C3C';
-                btn.style.borderColor = '#E74C3C';
-            } else {
-                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Guardar';
-                btn.style.backgroundColor = '';
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }
-        }
+        // Marcamos "propiedades" como el enlace activo
+        renderNavbar('propiedades');
     </script>
 </body>
 </html>

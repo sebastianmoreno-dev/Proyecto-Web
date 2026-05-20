@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel - EstateArch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar"></header>
+
+    <div class="panel-layout">
+        <aside class="panel-sidebar">
+            <div class="sidebar-user">
+                <div class="s-nombre" id="sidebar-nombre">Cargando...</div>
+                <div class="s-rol" id="sidebar-rol">Vendedor</div>
+            </div>
+            <button class="sidebar-link active" onclick="mostrarSeccion('mis-propiedades', this)">
+                <i class="fa-solid fa-house"></i> Mis Propiedades
+            </button>
+            <button class="sidebar-link" onclick="mostrarSeccion('mensajes', this)">
+                <i class="fa-solid fa-envelope"></i> Mensajes
+                <span id="badge-mensajes" style="background:#E74C3C;color:white;border-radius:10px;padding:1px 7px;font-size:0.7rem;margin-left:auto;display:none;">0</span>
+            </button>
+            <button class="sidebar-link" onclick="mostrarSeccion('citas', this)">
+                <i class="fa-solid fa-calendar"></i> Citas Agendadas
+            </button>
+            <button class="sidebar-link" onclick="window.location.href='nuevaPropiedad.html'">
+                <i class="fa-solid fa-plus"></i> Nueva Propiedad
+            </button>
+            <button class="sidebar-link" onclick="Auth.logout()" style="margin-top:20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:20px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </aside>
+
+        <main class="panel-main">
+            <div class="panel-header">
+                <h1>Mi Panel</h1>
+            </div>
+
+            <div class="stats-row" id="stats-row">
+                <div class="stat-box">
+                    <div class="num" id="st-propiedades">-</div>
+                    <div class="lbl">MIS PROPIEDADES</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="st-mensajes">-</div>
+                    <div class="lbl">MENSAJES NUEVOS</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="st-citas">-</div>
+                    <div class="lbl">CITAS PENDIENTES</div>
+                </div>
+            </div>
+
+            <div class="panel-section active" id="sec-mis-propiedades">
+                <h2>
+                    Mis Propiedades
+                    <a href="nuevaPropiedad.html" class="btn btn-primary" style="font-size:0.85rem;padding:8px 16px;">
+                        <i class="fa-solid fa-plus"></i> Nueva
+                    </a>
+                </h2>
+                <div id="lista-propiedades">
+                    <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i> Cargando...</div>
+                </div>
+            </div>
+
+            <div class="panel-section" id="sec-mensajes">
+                <h2>Mensajes Recibidos</h2>
+                <div id="lista-mensajes">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-envelope-open"></i>
+                        <p>Aún no tienes mensajes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section" id="sec-citas">
+                <h2>Citas Agendadas</h2>
+                <div id="lista-citas">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-calendar-xmark"></i>
+                        <p>No tienes citas pendientes.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/vendedor.js"></script>
+</body>
+</html>
