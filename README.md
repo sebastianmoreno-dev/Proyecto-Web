@@ -106,7 +106,7 @@ en tu navegador.
 
 - [Nombre integrante 1]
 - [Nombre integrante 2]
-- [Nombre integrante 3]
+- Palomo Rodríguez Hector Lenin
 - Sebastian Moreno Saenz
 
 ---
