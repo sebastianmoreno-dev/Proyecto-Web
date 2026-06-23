@@ -4,12 +4,11 @@ const router  = express.Router();
 const ctrl    = require('../controllers/propiedadesController');
 const { verificarToken, verificarRol } = require('../middlewares/auth');
 
-// ── PÚBLICAS ─────────────────────────────────────────────────
+// ── PÚBLICAS ESTATICAS ─────────────────────────────────────────────────
 // GET  /api/propiedades           → Listar todas (con filtros opcionales)
 // GET  /api/propiedades/:id       → Ver una propiedad
 
 router.get('/',    ctrl.listar);
-router.get('/:id', ctrl.verUna);
 
 // ── VENDEDOR / ADMIN ─────────────────────────────────────────
 // GET  /api/propiedades/mis-propiedades → Ver propiedades propias (vendedor)
@@ -28,6 +27,10 @@ router.post('/',
     verificarRol('vendedor', 'admin'),
     ctrl.crear
 );
+
+// ── PÚBLICAS DINAMICAS ─────────────────────────────────────────────────
+
+router.get('/:id', ctrl.verUna);
 
 router.put('/:id',
     verificarToken,
