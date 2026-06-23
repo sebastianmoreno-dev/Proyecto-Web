@@ -1,4 +1,6 @@
 // ── Función para simular el envío del formulario de contacto ──
+
+const API = 'http://localhost:8000/api';
 function sendMessage() {
     const inputs = document.querySelectorAll('.form-control');
     let valid = true;

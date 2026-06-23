@@ -1,4 +1,4 @@
-// js/navbar.js — Lógica compartida de navegación para todas las páginas
+const API = 'http://localhost:8000/api';
 
 const Auth = {
     getToken:   () => localStorage.getItem('token'),
@@ -6,7 +6,7 @@ const Auth = {
     getNombre:  () => localStorage.getItem('nombre'),
     getUsuario: () => JSON.parse(localStorage.getItem('usuario') || 'null'),
     isLoggedIn: () => !!localStorage.getItem('token'),
-    logout: () => { localStorage.clear(); window.location.href = 'index.html'; }
+    logout: () => { localStorage.clear(); window.location.href = 'index.php'; }
 };
 
 // Renderiza el navbar COMPLETO universalmente
@@ -20,7 +20,7 @@ function renderNavbar(paginaActiva = '') {
 
     // 1. Construir el Logo
     const logoHTML = `
-        <a href="index.html" style="text-decoration:none;">
+        <a href="index.php" style="text-decoration:none;">
             <div class="logo">Estate<span>Arch</span></div>
         </a>
     `;
@@ -28,9 +28,9 @@ function renderNavbar(paginaActiva = '') {
     // 2. Construir los Enlaces del Centro
     const centerHTML = `
         <nav class="nav-center">
-            <a href="index.html" class="${paginaActiva === 'propiedades' ? 'active' : ''}">Propiedades</a>
-            <a href="nosotros.html" class="${paginaActiva === 'nosotros' ? 'active' : ''}">Nosotros</a>
-            <a href="contacto.html" class="${paginaActiva === 'contacto' ? 'active' : ''}">Contacto</a>
+            <a href="index.php" class="${paginaActiva === 'propiedades' ? 'active' : ''}">Propiedades</a>
+            <a href="nosotros.php" class="${paginaActiva === 'nosotros' ? 'active' : ''}">Nosotros</a>
+            <a href="contacto.php" class="${paginaActiva === 'contacto' ? 'active' : ''}">Contacto</a>
         </nav>
     `;
 
@@ -40,20 +40,19 @@ function renderNavbar(paginaActiva = '') {
     if (!loggedIn) {
         userHTML = `
             <div class="nav-actions">
-                <a href="auth.html" class="sell-link">Vender Propiedad</a>
-                <a href="auth.html" class="btn btn-primary" style="padding:10px 20px; border-radius:6px;">Iniciar Sesión</a>
+                <a href="auth.php" class="sell-link">Vender Propiedad</a>
+                <a href="auth.php" class="btn btn-primary" style="padding:10px 20px; border-radius:6px;">Iniciar Sesión</a>
             </div>
         `;
     } else {
-        // CORRECCIÓN: Rutas separadas para vendedor y administrador
+        // Rutas separadas para vendedor y administrador
         let menuExtra = '';
         if (rol === 'comprador') {
-            menuExtra = `<a href="favoritos.html" class="sell-link"><i class="fa-solid fa-heart"></i> Favoritos</a>`;
+            menuExtra = `<a href="favoritos.php" class="sell-link"><i class="fa-solid fa-heart"></i> Favoritos</a>`;
         } else if (rol === 'vendedor') {
-            // Asegúrate de que este archivo exista en tu carpeta frontend/src
-            menuExtra = `<a href="vendedor.html" class="sell-link"><i class="fa-solid fa-chart-line"></i> Mi Panel</a>`;
+            menuExtra = `<a href="vendedor.php" class="sell-link"><i class="fa-solid fa-chart-line"></i> Mi Panel</a>`;
         } else if (rol === 'admin') {
-            menuExtra = `<a href="admin.html" class="sell-link"><i class="fa-solid fa-shield-halved"></i> Admin</a>`;
+            menuExtra = `<a href="admin.php" class="sell-link"><i class="fa-solid fa-shield-halved"></i> Admin</a>`;
         }
 
         userHTML = `
@@ -74,7 +73,7 @@ function renderNavbar(paginaActiva = '') {
 }
 
 // Protege páginas que requieren login
-function requireLogin(redirectUrl = 'auth.html') {
+function requireLogin(redirectUrl = 'auth.php') {
     if (!Auth.isLoggedIn()) {
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
         window.location.href = redirectUrl;
@@ -87,11 +86,11 @@ function requireLogin(redirectUrl = 'auth.html') {
 function requireRol(...roles) {
     if (!Auth.isLoggedIn()) {
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
-        window.location.href = 'auth.html';
+        window.location.href = 'auth.php';
         return false;
     }
     if (!roles.includes(Auth.getRol())) {
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
         return false;
     }
     return true;

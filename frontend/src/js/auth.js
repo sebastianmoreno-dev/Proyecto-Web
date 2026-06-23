@@ -1,6 +1,5 @@
 // js/auth.js
-
-const API = 'http://localhost:3000/api';
+const API = 'http://localhost:8000/api';
 
 // ── Si ya hay sesión, redirigir automáticamente ──────────────
 if (localStorage.getItem('token')) {

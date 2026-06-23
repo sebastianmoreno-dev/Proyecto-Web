@@ -1,4 +1,4 @@
-const API_ADMIN = 'http://localhost:3000/api';
+const API = 'http://localhost:8000/api';
 const adminToken = localStorage.getItem('token');
 const adminRol = localStorage.getItem('role') || localStorage.getItem('rol'); // Respaldo por si usas 'role' o 'rol'
 

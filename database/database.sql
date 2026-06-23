@@ -64,10 +64,19 @@ CREATE TABLE IF NOT EXISTS mensajes (
 -- Contraseñas (todas usan bcrypt de "password123")
 -- IMPORTANTE: Reemplaza los hashes si cambias las contraseñas
 
-INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol) VALUES
-('Admin',   'EstateArch', 'admin@estatearch.mx',    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-('Carlos',  'Mendoza',    'vendedor@estatearch.mx',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'vendedor'),
-('María',   'López',      'comprador@estatearch.mx', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'comprador');
+INSERT INTO usuarios (nombre, apellido, correo, telefono, contrasena, rol) VALUES 
+-- 1 Administrador
+('Ana', 'Martínez', 'admin@estatearch.com', '5512345678', 'admin123', 'admin'),
+
+-- 1 Vendedor
+('Carlos', 'Mendoza', 'carlos@estatearch.com', '5598765432', 'vendedor123', 'vendedor'),
+
+-- 5 Compradores
+('Luis', 'García', 'luis@correo.com', '5500000001', 'clave123', 'comprador'),
+('María', 'López', 'maria@correo.com', '5500000002', 'clave123', 'comprador'),
+('Jorge', 'Ramírez', 'jorge@correo.com', '5500000003', 'clave123', 'comprador'),
+('Elena', 'Torres', 'elena@correo.com', '5500000004', 'clave123', 'comprador'),
+('Sofía', 'Hernández', 'sofia@correo.com', '5500000005', 'clave123', 'comprador');
 
 INSERT INTO propiedades (titulo, descripcion, precio, ubicacion, tipo, habitaciones, banos, area_m2, imagen_url, vendedor_id) VALUES
 ('Residencia en Polanco',       'Casa moderna con alberca y jardín.',           2450000, 'Polanco, CDMX',      'casa',         4, 5, 420, 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800', 2),

@@ -1,5 +1,4 @@
-const API = 'http://localhost:3000/api';
-
+const API = 'http://localhost:8000/api';
 // ── Cargar Propiedades Dinámicamente ─────────────────────────
 async function cargarPropiedades() {
     const grid = document.getElementById('cards-grid');
