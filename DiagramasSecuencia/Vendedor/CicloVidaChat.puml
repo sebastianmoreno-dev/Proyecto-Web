@@ -1,0 +1,41 @@
+@startuml Cliente
+actor Cliente
+actor "Agente Inmobiliario" as Agente
+participant "Interfaz Chat\n(Mensajes)" as UI
+control "Gestor Mensajes" as Gestor
+participant "Temporizador\ndel Sistema" as Cron
+database "Base de Datos" as BD
+
+Cliente -> UI: Envía primer mensaje
+activate UI
+UI -> Gestor: Procesar nuevo chat
+activate Gestor
+Gestor -> BD: Crear registro de chat
+Gestor -> Gestor: Estado = Activo\n(Registrar fecha de inicio)
+Gestor --> UI: Confirmar envío
+UI --> Cliente: Mensaje enviado
+deactivate Gestor
+deactivate UI
+
+note over Cliente, Agente: Lapso de 7 días para tener comunicación
+
+Cliente <-> Agente: Intercambian mensajes vía Gestor
+
+Cron -> Gestor: Evaluar Fecha (Actual - Inicio >= 7 días)
+activate Gestor
+alt Sin cita agendada
+    Gestor -> BD: Actualizar estado de chat
+    Gestor -> Gestor: Estado = Bloqueado\n(Deshabilitar mensajería)
+end
+deactivate Gestor
+
+note over Gestor: Comienza lapso de inactividad (15 días)
+
+Cron -> Gestor: Evaluar Inactividad (Sin citas ni compra)
+activate Gestor
+alt 15 días continuos bloqueado
+    Gestor -> BD: Actualizar estado y archivar
+    Gestor -> Gestor: Estado = Finalizado\n(Asume abandono de negociación)
+end
+deactivate Gestor
+@enduml

@@ -1,0 +1,39 @@
+@startuml cita
+actor Cliente
+actor "Agente Inmobiliario" as Agente
+control "Módulo de Citas" as Citas
+control "Gestor Mensajes" as Gestor
+database "Base de Datos" as BD
+
+Cliente -> Citas: Solicita cita en propiedad
+activate Citas
+Citas --> Agente: Notifica solicitud de cita
+
+Agente -> Citas: Establece la cita en el sistema
+Citas -> BD: Guardar confirmación de la cita
+
+Citas -> Gestor: Extensión de chat por cita (<<include>>)
+activate Gestor
+Gestor -> BD: Actualizar estado del chat
+Gestor -> Gestor: Estado = Extendido\n(Reactivar mensajería temporalmente)
+
+Gestor --> Agente: Notifica extensión del chat
+Gestor --> Cliente: Notifica cita agendada y chat extendido
+deactivate Gestor
+deactivate Citas
+
+alt Cliente cancela interés en la propiedad
+    Cliente -> Gestor: Ejecutar cancelación
+    activate Gestor
+    Gestor -> BD: Finalizar y archivar registro
+    Gestor -> Gestor: Estado = Finalizado
+    deactivate Gestor
+else Agente marca propiedad como "Vendida"
+    Agente -> Gestor: Actualizar propiedad a Vendida
+    activate Gestor
+    Gestor -> BD: Archivar chat de todos los interesados
+    Gestor -> Gestor: Estado = Finalizado
+    Gestor --> Cliente: Notificar: "Propiedad no disponible"
+    deactivate Gestor
+end
+@enduml

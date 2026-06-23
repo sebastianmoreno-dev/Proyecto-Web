@@ -1,0 +1,29 @@
+@startuml Usuario
+actor "Usuario Visitante / Cliente" as Usuario
+participant "Interfaz Web\n(index.html)" as UI
+control "Controlador de Búsqueda" as CtrlBusqueda
+database "Base de Datos" as BD
+
+Usuario -> UI: Ingresa filtros (ubicación, tipo, precio) y da clic en "Buscar"
+activate UI
+
+UI -> CtrlBusqueda: Solicita propiedades con filtros aplicados
+activate CtrlBusqueda
+
+CtrlBusqueda -> BD: Ejecutar consulta (SELECT * WHERE...)
+activate BD
+
+BD --> CtrlBusqueda: Retorna lista de propiedades coincidentes
+deactivate BD
+
+alt Resultados Encontrados
+    CtrlBusqueda --> UI: Envía lista de propiedades (JSON/Objeto)
+    UI --> Usuario: Renderiza las tarjetas en la sección "Propiedades Destacadas"
+else Sin Resultados
+    CtrlBusqueda --> UI: Envía lista vacía
+    UI --> Usuario: Muestra mensaje "No se encontraron propiedades con esos criterios"
+end
+
+deactivate CtrlBusqueda
+deactivate UI
+@enduml
