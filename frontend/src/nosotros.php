@@ -1,0 +1,119 @@
+<?php 
+    $titulo = "Nosotros - EstateArch"; 
+    include 'includes/head.php'; 
+?>
+<body>
+
+    <?php include 'includes/header.php'; ?>
+
+    <section class="about-hero">
+        <div class="about-hero-overlay"></div>
+        <div class="about-hero-content">
+            <p class="subtitle">QUIÉNES SOMOS</p>
+            <h1>Más que bienes raíces.<br><span class="text-green">Un legado arquitectónico.</span></h1>
+            <p>Desde 2010, conectamos a familias y visionarios con propiedades que trascienden el timepo.</p>
+        </div>
+    </section>
+
+    <section class="about-mission container">
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-bullseye"></i></div>
+                <h2>Nuestra Misión</h2>
+                <p>Democratizar el acceso a propiedades de alta calidad arquitectónica, ofreciendo transparencia, asesoría experta y un proceso de compra-venta sin fricciones.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-eye"></i></div>
+                <h2>Nuestra Visión</h2>
+                <p>Ser la plataforma de referencia en Latinoamérica para la comercialización de propiedades que destacan por su diseño, solidez estructural y valor patrimonial.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-gem"></i></div>
+                <h2>Nuestros Valores</h2>
+                <p>Integridad, excelencia arquitectónica, confianza y compromiso con cada cliente. Cada propiedad que listamos pasa por un riguroso proceso de evaluación.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-story">
+        <div class="container">
+            <div class="story-grid">
+                <div class="story-images">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=700&q=80" alt="Nuestra historia" class="story-img-main">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" alt="Propiedad" class="story-img-secondary">
+                </div>
+                <div class="story-text">
+                    <p class="subtitle">NUESTRA HISTORIA</p>
+                    <h2>15 años construyendo confianza</h2>
+                    <p>EstateArch nació de la convicción de que cada propiedad cuenta una historia. Fundada por un equipo de arquitectos y especialistas en bienes raíces, nuestra empresa combina el rigor técnico del diseño con la experiencia del mercado inmobiliario.</p>
+                    <p>Hoy contamos con más de 500 propiedades exitosamente gestionadas en México, Guatemala y el Caribe, y un equipo de 30 profesionales apasionados por la arquitectura y el servicio al cliente.</p>
+                    <div class="stats">
+                        <div class="stat-item"><h3>500+</h3><p>PROPIEDADES VENDIDAS</p></div>
+                        <div class="stat-item"><h3>15+</h3><p>AÑOS DE EXPERIENCIA</p></div>
+                        <div class="stat-item"><h3>98%</h3><p>CLIENTES SATISFECHOS</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section container">
+        <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 50px;">
+            <div>
+                <p class="subtitle">NUESTRO EQUIPO</p>
+                <h2>Los expertos detrás de EstateArch</h2>
+            </div>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar"><i class="fa-solid fa-user"></i></div>
+                <h3>Ana Martínez</h3>
+                <p class="team-role">Fundadora & CEO</p>
+                <p class="team-bio">Arquitecta con maestría en urbanismo. 20 años de experiencia en el mercado inmobiliario de lujo.</p>
+                <div class="team-social">
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar"><i class="fa-solid fa-user"></i></div>
+                <h3>Carlos Mendoza</h3>
+                <p class="team-role">Director Comercial</p>
+                <p class="team-bio">Especialista en negociación inmobiliaria y valoración de propiedades de alto valor arquitectónico.</p>
+                <div class="team-social">
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar"><i class="fa-solid fa-user"></i></div>
+                <h3>Sofía Reyes</h3>
+                <p class="team-role">Directora de Diseño</p>
+                <p class="team-bio">Arquitecta de interiores con proyectos reconocidos internacionalmente. Asesora en staging y presentación.</p>
+                <div class="team-social">
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-cta">
+        <div class="about-cta-content">
+            <h2>¿Listo para encontrar tu espacio ideal?</h2>
+            <p>Nuestro equipo está listo para guiarte en cada paso del proceso.</p>
+            <div class="cta-buttons">
+                <a href="index.php" class="btn btn-primary btn-large">Ver Propiedades</a>
+                <a href="contacto.php" class="btn btn-outline-cta btn-large">Contactarnos</a>
+            </div>
+        </div>
+    </section>
+
+    <?php include 'includes/footer.php'; ?>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        renderNavbar('nosotros');
+    </script>
+</body>
+</html>
