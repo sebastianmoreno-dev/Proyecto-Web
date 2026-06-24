@@ -1,4 +1,4 @@
-const API = 'http://localhost:8000/api';
+const API = '/Backend/api';
 // Protección de acceso: solo vendedores
 requireRol('vendedor', 'admin');
 

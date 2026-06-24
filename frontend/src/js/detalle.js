@@ -1,4 +1,4 @@
-const API = 'http://localhost:8000/api';
+const API = '/Backend/api';
 
 // ── Función para cambiar la imagen principal en la galería ──
 function changeImg(el, src) {

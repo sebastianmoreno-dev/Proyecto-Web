@@ -1,17 +1,16 @@
 // js/auth.js
-const API = 'http://localhost:8000/api';
+const API = '/Backend/api';
 
 // ── Si ya hay sesión, redirigir automáticamente ──────────────
 if (localStorage.getItem('token')) {
     const rolUsuario = localStorage.getItem('rol') || localStorage.getItem('role');
     
-    // Redirección inteligente al cargar la página si ya existe token
     if (rolUsuario === 'admin') {
-        window.location.href = 'admin.html';
+        window.location.href = 'admin.php';
     } else if (rolUsuario === 'vendedor') {
-        window.location.href = 'vendedor.html';
+        window.location.href = 'vendedor.php';
     } else {
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
     }
 }
 
@@ -27,18 +26,13 @@ function mostrarMsg(texto, tipo) {
 
 // ── Cambiar tab (Login / Registro) ───────────────────────────
 function switchTab(tabName, btnElement) {
-    // Quitar clase active de todos los botones
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     
-    // Agregar clase active al botón seleccionado
     if (btnElement) {
         btnElement.classList.add('active');
     }
 
-    // Ocultar mensaje de error anterior si existía
     document.getElementById('auth-msg').style.display = 'none';
-    
-    // Mostrar u ocultar formularios
     document.getElementById('login-form').style.display    = tabName === 'login'    ? 'block' : 'none';
     document.getElementById('register-form').style.display = tabName === 'register' ? 'block' : 'none';
 }
@@ -70,7 +64,6 @@ async function iniciarSesion() {
             return;
         }
 
-        // Guardar token y datos del usuario
         localStorage.setItem('token',   data.token);
         localStorage.setItem('rol',     data.usuario.rol);
         localStorage.setItem('nombre',  data.usuario.nombre);
@@ -78,15 +71,14 @@ async function iniciarSesion() {
 
         mostrarMsg(`¡Bienvenido, ${data.usuario.nombre}! Redirigiendo...`, 'exito');
 
-        // ── REDIRECCIÓN INTELIGENTE ──────────────────────────
         setTimeout(() => {
             const rol = data.usuario.rol;
             if (rol === 'admin') {
-                window.location.href = 'admin.html';
+                window.location.href = 'admin.php';
             } else if (rol === 'vendedor') {
-                window.location.href = 'vendedor.html';
+                window.location.href = 'vendedor.php';
             } else {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }, 1000);
 
@@ -102,14 +94,22 @@ async function iniciarSesion() {
 // ── Registrarse ──────────────────────────────────────────────
 async function registrarse() {
     const nombre     = document.getElementById('reg-nombre').value.trim();
-    const apellido   = document.getElementById('reg-apellido').value.trim();
+    const apat       = document.getElementById('reg-apat').value.trim();
+    const amat       = document.getElementById('reg-amat').value.trim();
+    const curp       = document.getElementById('reg-curp').value.trim().toUpperCase();
+    const fechaNac   = document.getElementById('reg-fecha-nac').value;
     const correo     = document.getElementById('reg-correo').value.trim();
     const rol        = document.getElementById('reg-rol').value;
     const contrasena = document.getElementById('reg-password').value;
     const btn        = document.getElementById('btn-registro');
 
-    if (!nombre || !apellido || !correo || !contrasena) {
+    if (!nombre || !apat || !amat || !curp || !fechaNac || !correo || !contrasena) {
         mostrarMsg('Por favor completa todos los campos.', 'error');
+        return;
+    }
+
+    if (curp.length !== 18) {
+        mostrarMsg('La CURP debe tener exactamente 18 caracteres.', 'error');
         return;
     }
 
@@ -120,7 +120,7 @@ async function registrarse() {
         const res  = await fetch(`${API}/auth/registro`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, apellido, correo, contrasena, rol })
+            body: JSON.stringify({ nombre, apat, amat, curp, fechaNac, correo, contrasena, rol })
         });
         const data = await res.json();
 
