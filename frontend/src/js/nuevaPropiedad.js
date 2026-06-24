@@ -1,4 +1,4 @@
-const API = 'http://localhost:8000/api';
+const API = '/Backend/api';
 // ── Proteger Ruta (Solo Vendedores y Admins) ─────────────────
 // Usamos la función de navbar.js en lugar de reescribirla
 requireRol('vendedor', 'admin');

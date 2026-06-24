@@ -1,9 +1,9 @@
 <?php
 // backend/config/db.php
 $host = 'localhost';
-$db   = 'estatearch_db';
-$user = 'root'; // Ajusta tus credenciales
-$pass = ''; 
+$db   = '2025proyitw';
+$user = '202501itw'; // Ajusta tus credenciales
+$pass = '2025#01069'; 
 $charset = 'utf8mb4';
 
 try {
@@ -12,7 +12,9 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 } catch (\PDOException $e) {
+    // Código crítico añadido: informar al navegador que hubo un error interno
+    http_response_code(500); 
     header('Content-Type: application/json');
-    echo json_encode(["mensaje" => "Error de conexión: " . $e->getMessage()]);
+    echo json_encode(["mensaje" => "Error de conexión a la base de datos: " . $e->getMessage()]);
     exit;
 }

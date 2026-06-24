@@ -46,14 +46,31 @@
                 <form id="register-form" class="auth-form" style="display: none;">
                     <div class="form-row">
                         <div class="form-group flex-1">
-                            <label>NOMBRE</label>
+                            <label>NOMBRE(S)</label>
                             <input type="text" id="reg-nombre" class="form-control" placeholder="Tu nombre">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group flex-1">
-                            <label>APELLIDO</label>
-                            <input type="text" id="reg-apellido" class="form-control" placeholder="Tu apellido">
+                            <label>APELLIDO PATERNO</label>
+                            <input type="text" id="reg-apat" class="form-control" placeholder="Paterno">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>APELLIDO MATERNO</label>
+                            <input type="text" id="reg-amat" class="form-control" placeholder="Materno">
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>CURP</label>
+                            <input type="text" id="reg-curp" class="form-control" placeholder="18 caracteres" maxlength="18" style="text-transform: uppercase;">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>FECHA NACIMIENTO</label>
+                            <input type="date" id="reg-fecha-nac" class="form-control">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>CORREO ELECTRÓNICO</label>
                         <input type="email" id="reg-correo" class="form-control" placeholder="ejemplo@correo.com">
