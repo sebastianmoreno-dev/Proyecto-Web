@@ -2,60 +2,64 @@
 // backend/controllers/PropiedadController.php
 class PropiedadController {
     
-    // 1. Listar para el Index
     public static function listar($pdo, $filtros) {
         $sql = "SELECT 
-                    p.id_propiedad AS id,
-                    'casa' AS tipo, 
-                    p.pro_precio AS precio,
-                    u.pru_calle AS ubicacion,
-                    d.prd_habitaciones AS habitaciones,
-                    d.prd_banos AS banos,
-                    d.prd_area_m2_terreno AS area_m2,
-                    '' AS imagen_url
-                FROM propiedad p
-                JOIN propiedad_datos d ON p.id_datos = d.id_datos
-                JOIN propiedad_ubicacion u ON p.id_ubicacion = u.id_ubicacion
-                WHERE d.id_estatus_propiedad = 1";
+                    id,
+                    titulo,
+                    tipo,
+                    precio,
+                    ubicacion,
+                    habitaciones,
+                    banos,
+                    area_m2,
+                    imagen_url
+                FROM vista_propiedades
+                WHERE 1=1"; //Se removio la condicional 
 
         $params = [];
 
         if (!empty($filtros['ubicacion'])) {
-            $sql .= " AND u.pru_calle LIKE ?"; 
+            $sql .= " AND ubicacion LIKE ?"; 
             $params[] = "%" . $filtros['ubicacion'] . "%";
         }
         if (!empty($filtros['precio_max'])) {
-            $sql .= " AND p.pro_precio <= ?"; 
+            $sql .= " AND precio <= ?"; 
             $params[] = $filtros['precio_max'];
+        }
+        if (!empty($filtros['tipo'])) {
+            $sql .= " AND tipo = ?"; 
+            $params[] = $filtros['tipo'];
         }
 
         try {
             $stmt = $pdo->prepare($sql); 
             $stmt->execute($params);
-            echo json_encode($stmt->fetchAll());
+            echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode(["mensaje" => "Error SQL: " . $e->getMessage()]);
         }
     }
 
-    // 2. Detalle de propiedad
+
     public static function obtenerPorId($pdo, $id) {
-        $stmt = $pdo->prepare("SELECT * FROM vista_propiedades WHERE id = ?");
-        $stmt->execute([$id]);
-        $prop = $stmt->fetch();
-        
-        if ($prop) {
-            $prop['area_m2'] = $prop['area_terreno'];
-            $prop['vendedor_apellido'] = ''; 
-            echo json_encode($prop);
-        } else { 
-            http_response_code(404); 
-            echo json_encode(["mensaje" => "Propiedad no encontrada"]); 
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM vista_propiedades WHERE id = ?");
+            $stmt->execute([$id]);
+            $prop = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($prop) {
+                echo json_encode($prop);
+            } else { 
+                http_response_code(404); 
+                echo json_encode(["mensaje" => "Propiedad no encontrada"]); 
+            }
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["mensaje" => "Error: " . $e->getMessage()]);
         }
     }
 
-    // 3. Panel de vendedor
     public static function misPropiedades($pdo, $tokenData) {
         if (!$tokenData || $tokenData['rol'] !== 'vendedor') { 
             http_response_code(401); 
@@ -63,24 +67,35 @@ class PropiedadController {
             return; 
         }
         
-        $stmtVen = $pdo->prepare("SELECT id_vendedor FROM vendedor WHERE id_usuario = ?");
-        $stmtVen->execute([$tokenData['id']]);
-        $vendedor = $stmtVen->fetch();
+        try {
+            $stmtVen = $pdo->prepare("SELECT id_vendedor FROM vendedor WHERE id_usuario = ?");
+            $stmtVen->execute([$tokenData['id']]);
+            $vendedor = $stmtVen->fetch(PDO::FETCH_ASSOC);
 
-        if (!$vendedor) {
-            echo json_encode([]); return;
+            if (!$vendedor) {
+                echo json_encode([]); 
+                return;
+            }
+
+            $stmt = $pdo->prepare("
+                SELECT 
+                    id, 
+                    titulo, 
+                    ubicacion, 
+                    precio, 
+                    estado_propiedad AS estado, 
+                    imagen_url 
+                FROM vista_propiedades 
+                WHERE id_vendedor = ?
+            ");
+            $stmt->execute([$vendedor['id_vendedor']]);
+            echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["mensaje" => "Error: " . $e->getMessage()]);
         }
-
-        $stmt = $pdo->prepare("
-            SELECT id, titulo, ubicacion, precio, estado_propiedad AS estado, imagen_url 
-            FROM vista_propiedades 
-            WHERE vendedor_correo = (SELECT usu_correo FROM usuario WHERE id_usuario = ?)
-        ");
-        $stmt->execute([$tokenData['id']]);
-        echo json_encode($stmt->fetchAll());
     }
 
-    // 4. Crear nueva propiedad
     public static function crear($pdo, $body, $tokenData) {
         if (!$tokenData || !in_array($tokenData['rol'], ['vendedor', 'admin'])) {
             http_response_code(401); 
@@ -93,43 +108,71 @@ class PropiedadController {
 
             $stmtVen = $pdo->prepare("SELECT id_vendedor FROM vendedor WHERE id_usuario = ?");
             $stmtVen->execute([$tokenData['id']]);
-            $vendedor = $stmtVen->fetch();
+            $vendedor = $stmtVen->fetch(PDO::FETCH_ASSOC);
             if (!$vendedor) throw new Exception("Perfil de vendedor no encontrado.");
             $idVendedor = $vendedor['id_vendedor'];
-
-            $tipoStr = strtolower($body['tipo']);
+            
+            $tipoStr = strtolower($body['tipo'] ?? 'casa');
             $idTipo = 1; 
             if ($tipoStr === 'departamento') $idTipo = 2;
             if ($tipoStr === 'terreno') $idTipo = 3;
 
-            $stmtUbi = $pdo->prepare("INSERT INTO propiedad_ubicacion (pru_estado, pru_municipio, pru_calle) VALUES ('No especificado', 'No especificado', ?)");
-            $stmtUbi->execute([$body['ubicacion']]);
+            // 1. Insertar ubicación
+            $stmtUbi = $pdo->prepare("
+                INSERT INTO propiedad_ubicacion 
+                (pru_estado, pru_municipio, pru_calle) 
+                VALUES ('No especificado', 'No especificado', ?)
+            ");
+            $stmtUbi->execute([$body['ubicacion'] ?? 'Sin ubicación']);
             $idUbicacion = $pdo->lastInsertId();
 
-            $stmtDatos = $pdo->prepare("INSERT INTO propiedad_datos (prd_titulo, prd_descripcion, prd_habitaciones, prd_banos, prd_area_m2_terreno, id_estatus_propiedad) VALUES (?, ?, ?, 0, ?, 1)");
+            // 2. Insertar datos de propiedad
+            $stmtDatos = $pdo->prepare("
+                INSERT INTO propiedad_datos 
+                (prd_titulo, prd_descripcion, prd_habitaciones, prd_banos, prd_area_m2_terreno, id_estatus_propiedad) 
+                VALUES (?, ?, ?, 0, ?, 1)
+            ");
             $stmtDatos->execute([
-                $body['titulo'], 
+                $body['titulo'] ?? 'Sin título', 
                 $body['descripcion'] ?? '', 
-                $body['habitaciones'], 
-                $body['area_m2']
+                $body['habitaciones'] ?? 0, 
+                $body['area_m2'] ?? 0
             ]);
             $idDatos = $pdo->lastInsertId();
 
-            $folio = "EA-" . date("Y") . "-" . rand(1000, 9999);
+            // 3. Generar folio único
+            $folio = "EA-" . date("Y") . "-" . rand(10000, 99999);
 
-            $stmtProp = $pdo->prepare("INSERT INTO propiedad (id_vendedor, id_datos, id_ubicacion, id_pro_tipo, pro_precio, pro_folio) VALUES (?, ?, ?, ?, ?, ?)");
+            // 4. Insertar propiedad
+            $stmtProp = $pdo->prepare("
+                INSERT INTO propiedad 
+                (id_vendedor, id_datos, id_ubicacion, id_pro_tipo, pro_precio, pro_folio) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
             $stmtProp->execute([
-                $idVendedor, $idDatos, $idUbicacion, $idTipo, $body['precio'], $folio
+                $idVendedor, 
+                $idDatos, 
+                $idUbicacion, 
+                $idTipo, 
+                $body['precio'] ?? 0, 
+                $folio
             ]);
 
             $pdo->commit();
             http_response_code(201);
-            echo json_encode(["mensaje" => "Propiedad creada exitosamente", "folio" => $folio]);
+            echo json_encode([
+                "mensaje" => "Propiedad creada exitosamente", 
+                "folio" => $folio,
+                "id_propiedad" => $pdo->lastInsertId()
+            ]);
 
         } catch (Exception $e) {
             $pdo->rollBack();
             http_response_code(500); 
-            echo json_encode(["mensaje" => "Error al registrar la propiedad.", "error" => $e->getMessage()]);
+            echo json_encode([
+                "mensaje" => "Error al registrar la propiedad.", 
+                "error" => $e->getMessage()
+            ]);
         }
     }
 }
