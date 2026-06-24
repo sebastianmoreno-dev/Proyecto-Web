@@ -18,6 +18,7 @@ require_once 'controllers/AuthController.php';
 require_once 'controllers/PropiedadController.php';
 require_once 'controllers/AdminController.php';
 require_once 'controllers/FavoritoController.php';
+require_once 'controllers/ChatController.php';
 
 // Leer la URL directamente para que funcione con php -S
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -68,6 +69,22 @@ if ($urlSegmentos[0] === 'api') {
     if ($urlSegmentos[0] === 'favoritos' && isset($urlSegmentos[1])) {
         if ($metodo === 'POST') FavoritoController::agregar($pdo, $urlSegmentos[1], $tokenData);
         if ($metodo === 'DELETE') FavoritoController::eliminar($pdo, $urlSegmentos[1], $tokenData);
+    }
+
+    // Rutas: /api/negociaciones  (crea negociacion -> trigger crea chat)
+    if ($urlSegmentos[0] === 'negociaciones' && !isset($urlSegmentos[1]) && $metodo === 'POST') {
+        ChatController::iniciarNegociacion($pdo, $body, $tokenData);
+    }
+
+    // Rutas: /api/chats
+    if ($urlSegmentos[0] === 'chats') {
+        if (!isset($urlSegmentos[1]) && $metodo === 'GET') {
+            ChatController::listar($pdo, $tokenData);
+        }
+        if (isset($urlSegmentos[1]) && is_numeric($urlSegmentos[1]) && isset($urlSegmentos[2]) && $urlSegmentos[2] === 'mensajes') {
+            if ($metodo === 'GET')  ChatController::obtenerMensajes($pdo, (int)$urlSegmentos[1], $tokenData);
+            if ($metodo === 'POST') ChatController::enviarMensaje($pdo, (int)$urlSegmentos[1], $body, $tokenData);
+        }
     }
 } else {
     http_response_code(404);

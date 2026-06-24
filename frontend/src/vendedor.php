@@ -29,10 +29,23 @@
                 <h2>Mis Propiedades <a href="nuevaPropiedad.php" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nueva</a></h2>
                 <div id="lista-propiedades"><div class="empty-state">Cargando...</div></div>
             </div>
+
+            <div class="panel-section" id="sec-mensajes">
+                <h2>Mensajes</h2>
+                <div class="chat-layout">
+                    <aside class="chat-lista" id="chat-lista">
+                        <div class="chat-vacio">Cargando chats...</div>
+                    </aside>
+                    <section class="chat-conversacion" id="chat-conversacion">
+                        <div class="chat-vacio">Selecciona un chat para ver los mensajes.</div>
+                    </section>
+                </div>
+            </div>
         </main>
     </div>
 
     <script src="js/navbar.js"></script>
     <script src="js/vendedor.js"></script>
+    <script src="js/chat.js"></script>
 </body>
 </html>

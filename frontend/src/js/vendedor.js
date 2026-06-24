@@ -18,7 +18,13 @@ function mostrarSeccion(nombre, btn) {
     document.getElementById(`sec-${nombre}`).classList.add('active');
     btn.classList.add('active');
     
-    if (nombre === 'mis-propiedades') cargarMisPropiedades();
+    if (nombre === 'mis-propiedades') {
+        cargarMisPropiedades();
+        if (typeof Chat !== 'undefined') Chat.detener();
+    }
+    if (nombre === 'mensajes' && typeof Chat !== 'undefined') {
+        Chat.init();
+    }
 }
 
 // ── Cargar mis propiedades ───────────────────────────
