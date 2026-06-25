@@ -1,5 +1,5 @@
 // js/auth.js
-const API = '/Backend/api';
+const API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 
 // ── Si ya hay sesión, redirigir automáticamente ──────────────
 if (localStorage.getItem('token')) {

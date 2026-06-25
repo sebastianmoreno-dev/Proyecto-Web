@@ -258,12 +258,27 @@ footer { background-color: var(--bg-footer); padding: 40px 5%; margin-top: auto;
 .breadcrumb a { color: var(--primary-green); }
 .breadcrumb i { font-size: 0.7rem; }
 
+/* AJUSTES DE GALERÍA AQUÍ */
 .gallery-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; border-radius: 12px; overflow: hidden; margin-bottom: 30px; height: 420px; }
-.gallery-main { position: relative; }
-.gallery-main img { width: 100%; height: 100%; object-fit: cover; }
-.badge-detail { position: absolute; top: 20px; left: 20px; background-color: var(--primary-green); color: var(--white); padding: 6px 12px; font-size: 0.75rem; font-weight: bold; border-radius: 4px; }
-.gallery-thumbs { display: grid; grid-template-rows: repeat(2, 1fr); gap: 10px; }
-.gallery-thumbs img, .gallery-more { width: 100%; height: 100%; object-fit: cover; cursor: pointer; border-radius: 4px; transition: opacity 0.2s; }
+.gallery-main { position: relative; height: 100%; background-color: #f5f5f5; border-radius: 8px; } /* Fondo gris añadido */
+.gallery-main img { width: 100%; height: 100%; object-fit: contain; } /* Cambiado de cover a contain */
+.badge-detail { position: absolute; top: 20px; left: 20px; background-color: var(--primary-green); color: var(--white); padding: 6px 12px; font-size: 0.75rem; font-weight: bold; border-radius: 4px; z-index: 10; }
+
+/* MINIATURAS DINÁMICAS CON SCROLL */
+.gallery-thumbs { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); /* 2 Columnas fijas */
+    grid-auto-rows: 130px; /* Altura fija para cada miniatura */
+    gap: 10px; 
+    overflow-y: auto; /* Permite scrollear si hay muchas fotos */
+    height: 100%;
+    padding-right: 5px; /* Espacio para que el scrollbar no pise la foto */
+}
+/* Estilo para la barra de scroll de las miniaturas */
+.gallery-thumbs::-webkit-scrollbar { width: 6px; }
+.gallery-thumbs::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+
+.gallery-thumbs img, .gallery-more { width: 100%; height: 100%; object-fit: cover; cursor: pointer; border-radius: 6px; transition: opacity 0.2s; }
 .gallery-thumbs img:hover { opacity: 0.85; }
 .gallery-more { position: relative; }
 .gallery-more img { border-radius: 4px; }
@@ -546,3 +561,130 @@ select.inline { border: 1px solid #DCDCDC; border-radius: 4px; padding: 4px 8px;
 .empty-state { text-align: center; padding: 40px; color: var(--text-gray); }
 .empty-state i { font-size: 2rem; margin-bottom: 15px; display: block; color: #D0D0D0; }
 .panel-header h1 { font-size: 1.8rem; color: var(--text-dark); margin-bottom: 20px; }
+
+/* --- ESTILOS PARA FAVORITOS Y CATÁLOGO --- */
+
+.grid-propiedades {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+/* Tarjeta principal */
+.property-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Quitamos el padding global para que la imagen toque los bordes */
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* Contenedor de la foto */
+.card-img-container {
+    position: relative;
+    height: 220px;
+    width: 100%;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Botón flotante para quitar favorito */
+.btn-remove-fav {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #e74c3c;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.btn-remove-fav:hover {
+    background: #e74c3c;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Contenido de texto de la tarjeta */
+.card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.badge-tipo {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.card-location {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.card-price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #2c3e50;
+}
+
+/* Botón secundario hueco */
+.btn-outline {
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+    background: transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background: var(--primary-green);
+    color: #fff;
+}
+
+/* Estado de lista vacía */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
