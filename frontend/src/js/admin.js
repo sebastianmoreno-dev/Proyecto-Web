@@ -5,7 +5,7 @@ const adminRol = localStorage.getItem('role') || localStorage.getItem('rol'); //
 // ── Verificar que sea admin al cargar la página ─────────────
 if (!adminToken || adminRol !== 'admin') {
     alert('Acceso denegado. Esta sección es exclusiva para administradores.');
-    window.location.href = 'auth.html';
+    window.location.href = 'auth.php';
 } else {
     // Si pasa la validación, pintamos su nombre y cargamos las stats
     const nombreUsuario = localStorage.getItem('nombre') || 'Usuario';
@@ -181,5 +181,5 @@ async function cambiarEstado(id, estado) {
 // ── Cerrar sesión ────────────────────────────────────────────
 function cerrarSesionAdmin() {
     localStorage.clear();
-    window.location.href = 'auth.html';
+    window.location.href = 'auth.php';
 }

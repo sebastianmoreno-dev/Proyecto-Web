@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!propiedadId) {
         alert("Propiedad no especificada.");
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
         return;
     }
 

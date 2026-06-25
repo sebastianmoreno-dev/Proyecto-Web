@@ -81,7 +81,7 @@ window.removeThumb = function(btn) {
 }
 
 // ── Publicar propiedad (Versión Unificada) ───────────────────
-async function publicarPropiedad(redirigirA = 'vendedor.html') {
+async function publicarPropiedad(redirigirA = 'vendedor.php') {
     const titulo       = document.getElementById('prop-titulo').value.trim();
     const tipo         = document.getElementById('prop-tipo').value;
     const precio       = document.getElementById('prop-precio').value;
@@ -121,7 +121,7 @@ async function publicarPropiedad(redirigirA = 'vendedor.html') {
         window.location.href = redirigirA;
 
     } catch (err) {
-        alert('No se pudo conectar al servidor. Verifica que Node esté corriendo.');
+        alert('No se pudo conectar al servidor PHP.');
         console.error(err);
     }
 }

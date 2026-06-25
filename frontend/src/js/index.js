@@ -51,7 +51,7 @@ async function cargarPropiedades() {
                         <span><i class="fa-solid fa-bath"></i> ${p.banos}</span>
                         <span><i class="fa-solid fa-ruler-combined"></i> ${p.area_m2} m²</span>
                     </div>
-                    <a href="detalle.html?id=${p.id}" class="btn btn-outline">Ver Detalles</a>
+                    <a href="detalle.php?id=${p.id}" class="btn btn-outline">Ver Detalles</a>
                 </div>
             </div>`).join('');
 
@@ -59,14 +59,14 @@ async function cargarPropiedades() {
         console.error("Error al cargar propiedades:", err);
         grid.innerHTML = `<div style="text-align:center;padding:60px;color:#C0392B;grid-column:1/-1;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size:2rem;margin-bottom:15px;display:block;"></i>
-            No se pudo conectar al servidor. Verifica que Node.js esté corriendo.</div>`;
+            Verifica que el servidor PHP esté corriendo</div>`;
     }
 }
 
 // ── Lógica de Favoritos ──────────────────────────────────────
 function toggleFavorito(btn, propiedadId) {
     if (!Auth.isLoggedIn()) {
-        window.location.href = 'auth.html';
+        window.location.href = 'auth.php';
         return;
     }
     
