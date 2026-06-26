@@ -1,54 +1,47 @@
 const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 
-// ── Función puente para el botón de búsqueda ─────────────────
-function aplicarFiltros() {
-    // Al presionar "Buscar", simplemente volvemos a ejecutar la carga
-    // La función leerá los filtros seleccionados automáticamente.
+function aplicarFiltros(){
     cargarPropiedades();
 }
 
-// ── Cargar Propiedades Dinámicamente ─────────────────────────
-async function cargarPropiedades() {
-    const grid = document.getElementById('cards-grid');
-    const ubicacion = document.getElementById('filtro-ubicacion').value || '';
-    const tipo = document.getElementById('filtro-tipo').value || '';
-    const precio = document.getElementById('filtro-precio').value || '';
-
-    // Mostrar estado de carga
+async function cargarPropiedades(){
     grid.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-gray);grid-column:1/-1;">
         <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;margin-bottom:15px;display:block;"></i>Cargando...</div>`;
 
-    // Construir la URL con parámetros de búsqueda
     let url = `${API_URL}/propiedades?`;
     if (ubicacion) url += `ubicacion=${encodeURIComponent(ubicacion)}&`;
     if (tipo)      url += `tipo=${encodeURIComponent(tipo)}&`;
     if (precio)    url += `precio_max=${encodeURIComponent(precio)}&`;
 
-    // Limpiamos el '&' o '?' del final por estética de la URL
     url = url.endsWith('&') ? url.slice(0, -1) : url;
     url = url.endsWith('?') ? url.slice(0, -1) : url;
 
-    try {
-        const res  = await fetch(url);
-        const data = await res.json(); // Leemos la memoria JSON antes de juzgar el HTTP status
+    try{
+        const res = await fetch(url);
+        const data = await res.json();
 
-        // Si PHP mandó un error crítico real y el JSON no tiene propiedades, abortamos
-        if (!res.ok && data.mensaje) {
-            throw new Error(`Servidor: ${res.status} - ${data.mensaje}`);
-        }
-
-        // Normalización: Aseguramos que la data siempre sea un arreglo para que .map() no colapse
-        const arrayData = Array.isArray(data) ? data : [data];
-
-        // Si no hay resultados con esos filtros
         if (!data || !data.length) {
             grid.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-gray);grid-column:1/-1;">
                 <i class="fa-solid fa-house-circle-xmark" style="font-size:2rem;margin-bottom:15px;display:block;"></i>
                 No se encontraron propiedades con estos filtros. Intenta con otra búsqueda.</div>`;
             return;
         }
+        grid.innerHTML = data.map(p => {
+            // 1. Evaluar la imagen: Si es null, vacía, o 'default.jpg', usamos la de Unsplash. 
+            // Si es una foto real, armamos la ruta absoluta hacia tu NUEVA carpeta administrada por PHP.
+            const tieneFotoReal = p.imagen_url && p.imagen_url !== 'default.jpg' && p.imagen_url !== 'null';
+            const rutaFoto = tieneFotoReal 
+                ? `/4CV3/moreseba/Proyecto-Web/frontend/img/${p.imagen_url}` 
+                : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80';
 
-        // Pintar las tarjetas
+            // 2. Proteger valores nulos para que no se imprima la palabra "null" en el HTML
+            const tituloLimpio = p.titulo || 'Propiedad sin título';
+            const ubicacionLimpia = p.ubicacion || 'Sin ubicación';
+            const tipoLimpio = (p.tipo || 'CASA').toUpperCase();
+            
+            return `<div class="card-prop">
+                <div class="card-image">
+                    <span class="badge">${tipoLimpio}</span>
                     <button class="btn-heart" onclick="toggleFavorito(this, ${p.id})">
                         <i class="fa-solid fa-heart"></i>
                     </button>
@@ -69,11 +62,11 @@ async function cargarPropiedades() {
             </div>`;
         }).join('');
 
-    } catch (err) {
+   } catch (err) {
         console.error("Error al cargar propiedades:", err);
         grid.innerHTML = `<div style="text-align:center;padding:60px;color:#C0392B;grid-column:1/-1;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size:2rem;margin-bottom:15px;display:block;"></i>
-            Ocurrió un problema: ${err.message}</div>`;
+            Verifica que el servidor PHP esté corriendo</div>`;
     }
 }
 
@@ -83,19 +76,19 @@ function toggleFavorito(btn, propiedadId) {
         window.location.href = 'auth.php';
         return;
     }
-    
+
     if (Auth.getRol() !== 'comprador') {
         alert('Solo los compradores pueden guardar propiedades en favoritos.');
         return;
     }
-    
+
     btn.classList.toggle('active');
     const activo = btn.classList.contains('active');
-    
+
     // Cambios visuales
     btn.style.color           = activo ? '#E74C3C' : '';
     btn.style.backgroundColor = activo ? '#FFE8E8' : '';
-    
+
     // Petición al backend
     const method = activo ? 'POST' : 'DELETE';
     fetch(`${API_URL}/favoritos/${propiedadId}`, {
@@ -103,6 +96,3 @@ function toggleFavorito(btn, propiedadId) {
         headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
     }).catch(err => console.error("Error al guardar favorito:", err));
 }
-
-// Ejecutar automáticamente al cargar la página
-cargarPropiedades();
