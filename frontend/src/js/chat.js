@@ -62,15 +62,29 @@ const Chat = (() => {
         }[m]));
     }
 
+    // Función auxiliar para obtener el token por si 'Auth' no está disponible globalmente
+    function getToken() {
+        if (typeof Auth !== 'undefined' && Auth.getToken) {
+            return Auth.getToken();
+        }
+        return localStorage.getItem('token') || sessionStorage.getItem('token');
+    }
+
     async function cargarLista() {
         const cont = document.getElementById('chat-lista');
         if (!cont) return;
         try {
             const res = await fetch(`${API}/chats`, {
-                headers: { Authorization: `Bearer ${Auth.getToken()}` }
+                headers: { Authorization: `Bearer ${getToken()}` }
             });
             if (!res.ok) throw new Error('Error al cargar chats');
             const data = await res.json();
+
+            // Protección: Si data no es un array, detenemos la ejecución limpia
+            if (!Array.isArray(data)) {
+                cont.innerHTML = `<div class="chat-vacio">No tienes chats activos.</div>`;
+                return;
+            }
 
             const stMensajes = document.getElementById('st-mensajes');
             if (stMensajes) {
@@ -116,12 +130,12 @@ const Chat = (() => {
         if (!cont) return;
         try {
             const res = await fetch(`${API}/chats/${chatActivoId}/mensajes`, {
-                headers: { Authorization: `Bearer ${Auth.getToken()}` }
+                headers: { Authorization: `Bearer ${getToken()}` }
             });
             if (!res.ok) throw new Error('Error al cargar mensajes');
             const data = await res.json();
 
-            const mensajesHTML = data.mensajes.length ? data.mensajes.map(m => `
+            const mensajesHTML = (data.mensajes && data.mensajes.length) ? data.mensajes.map(m => `
                 <div class="chat-msg ${m.id_remitente == data.id_usuario_actual ? 'mio' : 'otro'}">
                     <div class="chat-msg-autor">${escapeHtml(m.remitente_nombre)}</div>
                     <div class="chat-msg-texto">${escapeHtml(m.men_texto)}</div>
@@ -136,25 +150,39 @@ const Chat = (() => {
                 aviso = `<div class="chat-aviso ${claseExtra}">Chat <strong>${escapeHtml(data.estado)}</strong>${motivo}. No puedes enviar mensajes.</div>`;
             }
 
-            cont.innerHTML = `
-                <div class="chat-header">
-                    <span>Estado: <strong>${escapeHtml(data.estado)}</strong></span>
-                    <span style="font-size:0.75rem; color:#9ca3af;">Inicio: ${data.fecha_inicio ? new Date(data.fecha_inicio).toLocaleDateString() : '-'}</span>
-                </div>
-                <div class="chat-mensajes" id="chat-mensajes">${mensajesHTML}</div>
-                ${aviso}
-                <form class="chat-form" id="chat-form">
-                    <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="255" ${data.puede_enviar ? '' : 'disabled'}>
-                    <button type="submit" ${data.puede_enviar ? '' : 'disabled'}><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
-            `;
+            // Si es recarga silenciosa (polling), no reescribimos el formulario ni la cabecera, solo los mensajes
+            // para evitar parpadeos y que el usuario pierda el foco de lo que está escribiendo.
+            if (silencioso) {
+                const msgsContainer = document.getElementById('chat-mensajes');
+                if (msgsContainer) {
+                    // Validamos si el usuario estaba al final del scroll antes de actualizar
+                    const estabaAbajo = msgsContainer.scrollHeight - msgsContainer.scrollTop <= msgsContainer.clientHeight + 50;
+                    msgsContainer.innerHTML = mensajesHTML;
+                    // Solo scrolleamos hacia abajo si el usuario ya estaba abajo
+                    if (estabaAbajo) msgsContainer.scrollTop = msgsContainer.scrollHeight;
+                }
+            } else {
+                // Renderizado inicial del chat seleccionado
+                cont.innerHTML = `
+                    <div class="chat-header">
+                        <span>Estado: <strong>${escapeHtml(data.estado)}</strong></span>
+                        <span style="font-size:0.75rem; color:#9ca3af;">Inicio: ${data.fecha_inicio ? new Date(data.fecha_inicio).toLocaleDateString() : '-'}</span>
+                    </div>
+                    <div class="chat-mensajes" id="chat-mensajes">${mensajesHTML}</div>
+                    ${aviso}
+                    <form class="chat-form" id="chat-form">
+                        <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="255" ${data.puede_enviar ? '' : 'disabled'}>
+                        <button type="submit" ${data.puede_enviar ? '' : 'disabled'}><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                `;
 
-            const msgs = document.getElementById('chat-mensajes');
-            if (msgs) msgs.scrollTop = msgs.scrollHeight;
+                const msgs = document.getElementById('chat-mensajes');
+                if (msgs) msgs.scrollTop = msgs.scrollHeight;
 
-            if (data.puede_enviar) {
-                document.getElementById('chat-form').addEventListener('submit', enviarMensaje);
-                if (!silencioso) document.getElementById('chat-input').focus();
+                if (data.puede_enviar) {
+                    document.getElementById('chat-form').addEventListener('submit', enviarMensaje);
+                    document.getElementById('chat-input').focus();
+                }
             }
         } catch (e) {
             if (!silencioso) {
@@ -168,23 +196,27 @@ const Chat = (() => {
         const input = document.getElementById('chat-input');
         const texto = input.value.trim();
         if (!texto) return;
+        
         input.disabled = true;
+        
         try {
             const res = await fetch(`${API}/chats/${chatActivoId}/mensajes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization:  `Bearer ${Auth.getToken()}`
+                    Authorization:  `Bearer ${getToken()}`
                 },
                 body: JSON.stringify({ texto })
             });
             const data = await res.json();
+            
             if (!res.ok) {
                 alert(data.mensaje || 'No se pudo enviar el mensaje.');
                 return;
             }
+            
             input.value = '';
-            await renderConversacion(true);
+            await renderConversacion(false); // Forzamos recarga visual completa tras enviar para ajustar el scroll
             cargarLista();
         } catch (err) {
             alert('No se pudo conectar al servidor.');
@@ -194,9 +226,20 @@ const Chat = (() => {
         }
     }
 
-    function init() {
+    async function init() {
         injectStyles();
-        cargarLista();
+        await cargarLista(); // Esperamos a que se dibujen los contactos primero
+        
+        // --- MAGIA DEL AUTOCLIC ---
+        // Leemos si en la URL nos mandaron un ID (ej: chat.php?chat_id=5)
+        const params = new URLSearchParams(window.location.search);
+        const chatUrlId = params.get('chat_id');
+        
+        if (chatUrlId) {
+            abrirChat(chatUrlId); // Simulamos el clic para abrirlo de inmediato
+            // (Opcional) Limpiamos la URL para que quede bonita
+            window.history.replaceState({}, document.title, 'chat.php');
+        }
     }
 
     function detener() {

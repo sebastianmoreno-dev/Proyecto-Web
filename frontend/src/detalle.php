@@ -132,17 +132,19 @@
     <script>
         renderNavbar('propiedades');
 
-        // ── LÓGICA PARA CREAR/IR AL CHAT (Desde GitHub) ──
+        // ── LÓGICA PARA CREAR/IR AL CHAT ──
         async function iniciarChat() {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-            const API_URL = '/Backend/api'; // Ajustado para usar la ruta relativa limpia
+            const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
             
+            // 1. Verificamos que el usuario haya iniciado sesión
             if (!token) {
                 alert("Debes iniciar sesión para contactar a este agente.");
                 window.location.href = "auth.php";
                 return;
             }
 
+            // 2. Extraemos el ID de la propiedad directamente de la URL actual
             const urlParams = new URLSearchParams(window.location.search);
             const idPropiedad = urlParams.get('id');
 
@@ -152,7 +154,8 @@
             }
 
             try {
-                const res = await fetch(`${API_URL}/negociaciones`, {
+                // Le avisamos al backend que queremos abrir un canal de chat
+                const res = await fetch(`${API_URL}/chats`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -163,9 +166,11 @@
 
                 const data = await res.json();
                 
+                // Buscamos el ID del chat que el backend nos acaba de crear o devolver
                 const idChat = data.id_chat || data.id || '';
 
                 if (idChat) {
+                    // Si tenemos el ID, lo mandamos en la URL para que chat.php lo atrape
                     window.location.href = `chat.php?chat_id=${idChat}`;
                 } else {
                     window.location.href = 'chat.php';

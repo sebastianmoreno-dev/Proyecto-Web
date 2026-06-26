@@ -135,25 +135,29 @@ class PropiedadController {
             if ($tipoStr === 'departamento') $idTipo = 2;
             if ($tipoStr === 'terreno') $idTipo = 3;
 
-            // 1. Insertar ubicación
+            // 1. Insertar ubicación (Corregido para rellenar municipio y calle dinámicamente)
             $stmtUbi = $pdo->prepare("
                 INSERT INTO propiedad_ubicacion 
                 (pru_estado, pru_municipio, pru_calle) 
-                VALUES ('No especificado', 'No especificado', ?)
+                VALUES ('CDMX', ?, ?)
             ");
-            $stmtUbi->execute([$datos['ubicacion'] ?? 'Sin ubicación']);
+            $stmtUbi->execute([
+                $datos['ubicacion'] ?? 'Sin ubicación', // Se guarda en pru_municipio
+                $datos['ubicacion'] ?? 'Sin ubicación'  // Se guarda en pru_calle
+            ]);
             $idUbicacion = $pdo->lastInsertId();
 
-            // 2. Insertar datos de propiedad
+            // 2. Insertar datos de propiedad (Corregido)
             $stmtDatos = $pdo->prepare("
                 INSERT INTO propiedad_datos 
                 (prd_titulo, prd_descripcion, prd_habitaciones, prd_banos, prd_area_m2_terreno, id_estatus_propiedad) 
-                VALUES (?, ?, ?, 0, ?, 1)
+                VALUES (?, ?, ?, ?, ?, 1)
             ");
             $stmtDatos->execute([
                 $datos['titulo'] ?? 'Sin título', 
                 $datos['descripcion'] ?? '', 
                 $datos['habitaciones'] ?? 0, 
+                $datos['banos'] ?? 0,        // <--- Aquí agregamos la variable
                 $datos['area_m2'] ?? 0
             ]);
             $idDatos = $pdo->lastInsertId();
@@ -180,37 +184,34 @@ class PropiedadController {
             $idPropiedad = $pdo->lastInsertId();
 
             // 5. PROCESAMIENTO DE IMÁGENES
-                // 5. PROCESAMIENTO DE IMÁGENES
-if (isset($_FILES['imagenes'])) {
-    $totalImagenes = count($_FILES['imagenes']['name']);
-    
-    // MAGIA AQUÍ: dirname(__DIR__, 2) retrocede 2 carpetas automáticamente (sale de controllers y de Backend)
-    // y nos deja exactamente en la raíz de tu Proyecto-Web. Luego solo le sumamos el resto del camino.
-    $rutaBase = dirname(__DIR__, 2); 
-    $directorio = $rutaBase . "/frontend/img/";
-    
-    for ($i = 0; $i < $totalImagenes; $i++) {
-        $tmpName = $_FILES['imagenes']['tmp_name'][$i];
-        
-        if ($tmpName != "") {
-            $nombreArchivo = uniqid() . "-" . basename($_FILES['imagenes']['name'][$i]);
-            $rutaDestino = $directorio . $nombreArchivo;
-            
-            // INTENTAR MOVER
-            if (move_uploaded_file($tmpName, $rutaDestino)) {
-                // ÉXITO
-                $sqlImg = "INSERT INTO propiedad_imagenes (id_propiedad, pim_url, pim_es_principal) VALUES (?, ?, ?)";
-                $stmtImg = $pdo->prepare($sqlImg);
-                $stmtImg->execute([$idPropiedad, $nombreArchivo, ($i === 0 ? 1 : 0)]);
-            } else {
-                // FALLO (Solo pasará si la carpeta img no tiene permisos 777)
-                die("Error de permisos: PHP encontró la carpeta pero no lo dejan escribir. Ponle 777 a frontend/img.");
+            if (isset($_FILES['imagenes'])) {
+                $totalImagenes = count($_FILES['imagenes']['name']);
+                
+                // MAGIA AQUÍ: dirname(__DIR__, 2) retrocede 2 carpetas automáticamente (sale de controllers y de Backend)
+                // y nos deja exactamente en la raíz de tu Proyecto-Web. Luego solo le sumamos el resto del camino.
+                $rutaBase = dirname(__DIR__, 2); 
+                $directorio = $rutaBase . "/frontend/img/";
+                
+                for ($i = 0; $i < $totalImagenes; $i++) {
+                    $tmpName = $_FILES['imagenes']['tmp_name'][$i];
+                    
+                    if ($tmpName != "") {
+                        $nombreArchivo = uniqid() . "-" . basename($_FILES['imagenes']['name'][$i]);
+                        $rutaDestino = $directorio . $nombreArchivo;
+                        
+                        // INTENTAR MOVER
+                        if (move_uploaded_file($tmpName, $rutaDestino)) {
+                            // ÉXITO
+                            $sqlImg = "INSERT INTO propiedad_imagenes (id_propiedad, pim_url, pim_es_principal) VALUES (?, ?, ?)";
+                            $stmtImg = $pdo->prepare($sqlImg);
+                            $stmtImg->execute([$idPropiedad, $nombreArchivo, ($i === 0 ? 1 : 0)]);
+                        } else {
+                            // FALLO (Solo pasará si la carpeta img no tiene permisos 777)
+                            die("Error de permisos: PHP encontró la carpeta pero no lo dejan escribir. Ponle 777 a frontend/img.");
+                        }
+                    }
+                }
             }
-        }
-    }
-}
-
-            
 
             $pdo->commit();
             http_response_code(201);

@@ -3,8 +3,6 @@ const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 
 // ── Función puente para el botón de búsqueda ─────────────────
 function aplicarFiltros() {
-    // Al presionar "Buscar", simplemente volvemos a ejecutar la carga
-    // La función leerá los filtros seleccionados automáticamente.
     cargarPropiedades();
 }
 
@@ -25,14 +23,13 @@ async function cargarPropiedades() {
     if (tipo)      url += `tipo=${encodeURIComponent(tipo)}&`;
     if (precio)    url += `precio_max=${encodeURIComponent(precio)}&`;
 
-    // Limpiamos el '&' o '?' del final por estética de la URL
+    // Limpiamos el '&' o '?' del final por estética
     url = url.endsWith('&') ? url.slice(0, -1) : url;
     url = url.endsWith('?') ? url.slice(0, -1) : url;
 
     try {
         const res  = await fetch(url);
         
-        // Si hay error en el backend, lanzar excepción
         if (!res.ok) throw new Error("Error al obtener las propiedades");
         
         const data = await res.json();
@@ -47,14 +44,11 @@ async function cargarPropiedades() {
 
         // Pintar las tarjetas
         grid.innerHTML = data.map(p => {
-            // 1. Evaluar la imagen: Si es null, vacía, o 'default.jpg', usamos la de Unsplash. 
-            // Si es una foto real, armamos la ruta absoluta hacia tu NUEVA carpeta administrada por PHP.
             const tieneFotoReal = p.imagen_url && p.imagen_url !== 'default.jpg' && p.imagen_url !== 'null';
             const rutaFoto = tieneFotoReal 
                 ? `/4CV3/moreseba/Proyecto-Web/frontend/img/${p.imagen_url}` 
                 : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80';
 
-            // 2. Proteger valores nulos para que no se imprima la palabra "null" en el HTML
             const tituloLimpio = p.titulo || 'Propiedad sin título';
             const ubicacionLimpia = p.ubicacion || 'Sin ubicación';
             const tipoLimpio = (p.tipo || 'CASA').toUpperCase();
@@ -106,11 +100,9 @@ function toggleFavorito(btn, propiedadId) {
     btn.classList.toggle('active');
     const activo = btn.classList.contains('active');
     
-    // Cambios visuales
     btn.style.color           = activo ? '#E74C3C' : '';
     btn.style.backgroundColor = activo ? '#FFE8E8' : '';
     
-    // Petición al backend
     const method = activo ? 'POST' : 'DELETE';
     fetch(`${API_URL}/favoritos/${propiedadId}`, {
         method,
@@ -118,5 +110,4 @@ function toggleFavorito(btn, propiedadId) {
     }).catch(err => console.error("Error al guardar favorito:", err));
 }
 
-// Ejecutar automáticamente al cargar la página
 cargarPropiedades();
