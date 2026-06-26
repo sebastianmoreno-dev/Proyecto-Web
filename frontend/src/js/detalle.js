@@ -1,13 +1,11 @@
-// Antes decía const API = ...
 const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+//const API_URL = '/Backend/api';
 
-// ── Función para cambiar la imagen principal en la galería ──
 function changeImg(el, src) {
     const mainImg = document.getElementById('main-img');
     mainImg.src = src || el.src;
 }
 
-// ── Función para alternar el botón de favoritos en detalles ──
 function toggleHeartDetail(btn) {
     btn.classList.toggle('saved');
     if (btn.classList.contains('saved')) {
@@ -23,85 +21,145 @@ function toggleHeartDetail(btn) {
     }
 }
 
-// ── Lógica Principal para Cargar la Propiedad ──
+// ── Lógica Principal ──
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Leer el ID de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const propiedadId = urlParams.get('id');
 
     if (!propiedadId) {
         alert("Propiedad no especificada.");
-        window.location.href = 'index.php'; // Regresar al catálogo si no hay ID
+        window.location.href = 'index.php';
         return;
     }
 
-    try {
-        // 2. Hacer la petición al backend
-        const response = await fetch(`${API_URL}/propiedades/${propiedadId}`);
-        
-        if (!response.ok) {
-            throw new Error('Propiedad no encontrada.');
-        }
+    // Mostrar el formulario de reseña solo si es comprador
+    if (Auth.isLoggedIn() && Auth.getRol() === 'comprador') {
+        document.getElementById('form-resena-container').style.display = 'block';
+    }
 
+    try {
+        // 1. Cargar Propiedad
+        const response = await fetch(`${API_URL}/propiedades/${propiedadId}`);
+        if (!response.ok) throw new Error('Propiedad no encontrada.');
         const propiedad = await response.json();
 
-        // 3. Rellenar el HTML usando los ID específicos del nuevo diseño
         document.getElementById('bread-titulo').textContent = propiedad.titulo;
         document.getElementById('det-titulo').textContent = propiedad.titulo;
         document.getElementById('det-tipo').textContent = (propiedad.tipo || 'CASA').toUpperCase();
-        
-        // Formatear el precio con comas
         document.getElementById('det-precio').textContent = `$${Number(propiedad.precio).toLocaleString('en-US')}`;
-        
-        // Ubicación y Descripción
         document.getElementById('det-ubicacion').textContent = propiedad.ubicacion || 'Ubicación no especificada';
         document.getElementById('det-descripcion').textContent = propiedad.descripcion || 'Sin descripción disponible.';
-
-        // Rellenar amenidades
         document.getElementById('det-habitaciones').textContent = propiedad.habitaciones || '0';
         document.getElementById('det-banos').textContent = propiedad.banos || '0';
         document.getElementById('det-area').textContent = propiedad.area_terreno || '0';
 
-        // 4. Procesar la imagen con la ruta absoluta correcta que hicimos antes
         const mainImg = document.getElementById('main-img');
         const tieneFotoReal = propiedad.imagen_url && propiedad.imagen_url !== 'default.jpg';
-        
-        const rutaFoto = tieneFotoReal 
-            ? `/4CV3/moreseba/Proyecto-Web/frontend/img/${propiedad.imagen_url}` 
-            : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80';
+        mainImg.src = tieneFotoReal ? `/frontend/img/${propiedad.imagen_url}` : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80';
             
-        mainImg.src = rutaFoto;
-        // 4.5 Dibujar la galería de miniaturas dinámica
         const thumbsContainer = document.getElementById('gallery-thumbs');
-        thumbsContainer.innerHTML = ''; // Borrar las imágenes de Unsplash
+        thumbsContainer.innerHTML = ''; 
 
         if (propiedad.galeria && propiedad.galeria.length > 0) {
             propiedad.galeria.forEach(foto => {
-                // Ignoramos el registro si es un 'default.jpg'
                 if (foto.pim_url !== 'default.jpg') {
-                    const rutaMiniatura = `/4CV3/moreseba/Proyecto-Web/frontend/img/${foto.pim_url}`;
-                    
-                    // Inyectamos el HTML para cada miniatura
-                    thumbsContainer.innerHTML += `
-                        <img src="${rutaMiniatura}" alt="Foto galería" onclick="changeImg(this)">
-                    `;
+                    thumbsContainer.innerHTML += `<img src="/frontend/img/${foto.pim_url}" alt="Foto galería" onclick="changeImg(this)">`;
                 }
             });
         } else {
-            // Si no hay galería en la base de datos, no mostramos nada
             thumbsContainer.innerHTML = '<p style="color: #666; font-size: 0.9em;">Sin fotos adicionales</p>';
         }
 
-        // 5. Rellenar los datos del Agente Responsable (usando las columnas de la BD)
         document.getElementById('det-agente-nombre').textContent = propiedad.vendedor_nombre || 'Agente de EstateArch';
         document.getElementById('det-agente-correo').textContent = propiedad.vendedor_correo || 'Contacto pendiente';
 
+        // 2. Cargar las reseñas de esta propiedad
+        cargarResenas(propiedadId);
+
     } catch (error) {
-        console.error("Error al cargar detalles:", error);
+        console.error("Error:", error);
         document.querySelector('.detail-layout').innerHTML = `
             <div style="width: 100%; text-align: center; padding: 50px;">
-                <h2 style="color: #E74C3C;">Error: No se pudo cargar la información de esta propiedad.</h2>
+                <h2 style="color: #E74C3C;">Error al cargar la propiedad.</h2>
                 <a href="index.php" class="btn btn-outline" style="margin-top: 20px;">Volver al inicio</a>
             </div>`;
     }
 });
+
+// ── Funciones de Reseñas ──
+async function cargarResenas(id) {
+    const contenedor = document.getElementById('lista-resenas');
+    try {
+        const res = await fetch(`${API_URL}/propiedades/${id}/resenas`);
+        const data = await res.json();
+        
+        if (!data || !data.length) {
+            contenedor.innerHTML = '<p style="color: var(--text-gray); text-align: center; padding: 20px;">Aún no hay reseñas para esta propiedad. ¡Sé el primero en opinar!</p>';
+            return;
+        }
+        
+        contenedor.innerHTML = data.map(r => {
+            const estrellasLlenas = '★'.repeat(r.res_calificacion);
+            const estrellasVacias = '☆'.repeat(5 - r.res_calificacion);
+            const fecha = new Date(r.res_fecha).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            return `
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #EAEAEA;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="color: var(--text-dark); font-size: 1.05rem;">${r.cliente_nombre}</strong>
+                        <span style="color: #F1C40F; font-size: 1.1rem; letter-spacing: 2px;">${estrellasLlenas}<span style="color: #E0E0E0;">${estrellasVacias}</span></span>
+                    </div>
+                    <p style="font-size: 0.95rem; color: var(--text-gray); line-height: 1.6; margin-bottom: 8px;">${r.res_comentario}</p>
+                    <small style="color: #A0A0A0; font-size: 0.8rem;">Publicado el ${fecha}</small>
+                </div>
+            `;
+        }).join('');
+    } catch (error) {
+        contenedor.innerHTML = '<p style="color: #E74C3C; text-align: center;">Error al cargar las reseñas.</p>';
+    }
+}
+
+async function enviarResena(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-enviar-resena');
+    const idPropiedad = new URLSearchParams(window.location.search).get('id');
+    const calificacion = document.getElementById('res-calificacion').value;
+    const comentario = document.getElementById('res-comentario').value.trim();
+
+    btn.disabled = true;
+    btn.textContent = "Publicando...";
+
+    try {
+        const res = await fetch(`${API_URL}/propiedades/${idPropiedad}/resenas`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Auth.getToken()}`
+            },
+            body: JSON.stringify({ calificacion, comentario })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+            document.getElementById('res-comentario').value = '';
+            cargarResenas(idPropiedad); 
+            
+            btn.textContent = "Reseña Publicada ✔";
+            btn.style.backgroundColor = "#27ae60";
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = "Publicar Reseña";
+                btn.style.backgroundColor = "var(--primary-green)";
+            }, 3000);
+        } else {
+            alert(data.mensaje || 'Error al guardar la reseña.');
+            btn.disabled = false;
+            btn.textContent = "Publicar Reseña";
+        }
+    } catch (error) {
+        alert('Error de conexión al intentar publicar la reseña.');
+        btn.disabled = false;
+        btn.textContent = "Publicar Reseña";
+    }
+}

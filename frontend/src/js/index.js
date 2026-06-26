@@ -1,4 +1,5 @@
 const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+//const API_URL = '/Backend/api';
 
 // ── Función puente para el botón de búsqueda ─────────────────
 function aplicarFiltros() {

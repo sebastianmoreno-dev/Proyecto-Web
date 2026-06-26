@@ -19,6 +19,7 @@ require_once 'controllers/PropiedadController.php';
 require_once 'controllers/AdminController.php';
 require_once 'controllers/FavoritoController.php';
 require_once 'controllers/ChatController.php';
+require_once 'controllers/ResenaController.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $url = isset($_GET['url']) ? $_GET['url'] : ltrim($uri, '/');
@@ -56,7 +57,16 @@ if ($urlSegmentos[0] === 'api') {
         if (!isset($urlSegmentos[1]) && $metodo === 'GET') PropiedadController::listar($pdo, $_GET);
         if ($urlSegmentos[1] === 'mis-propiedades' && $metodo === 'GET') PropiedadController::misPropiedades($pdo, $tokenData);
         if (!isset($urlSegmentos[1]) && $metodo === 'POST') PropiedadController::crear($pdo, $body, $tokenData);
-        if (isset($urlSegmentos[1]) && is_numeric($urlSegmentos[1]) && $metodo === 'GET') PropiedadController::obtenerPorId($pdo, $urlSegmentos[1]);
+        
+        // --- NUEVAS RUTAS PARA RESEÑAS ---
+        if (isset($urlSegmentos[1]) && is_numeric($urlSegmentos[1]) && isset($urlSegmentos[2]) && $urlSegmentos[2] === 'resenas') {
+            if ($metodo === 'GET') ResenaController::listarPorPropiedad($pdo, $urlSegmentos[1]);
+            if ($metodo === 'POST') ResenaController::crear($pdo, $urlSegmentos[1], $body, $tokenData);
+            exit; // Detenemos la ejecución para que no busque otras rutas
+        }
+        // ----------------------------------
+
+        if (isset($urlSegmentos[1]) && is_numeric($urlSegmentos[1]) && !isset($urlSegmentos[2]) && $metodo === 'GET') PropiedadController::obtenerPorId($pdo, $urlSegmentos[1]);
     }
 
     if ($urlSegmentos[0] === 'favoritos' && isset($urlSegmentos[1])) {
