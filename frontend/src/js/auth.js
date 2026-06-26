@@ -9,6 +9,8 @@ if (localStorage.getItem('token')) {
         window.location.href = 'admin.php';
     } else if (rolUsuario === 'vendedor') {
         window.location.href = 'vendedor.php';
+    } else if (rolUsuario === 'agente') {
+        window.location.href = 'agente.php'; // <-- AGREGADO
     } else {
         window.location.href = 'index.php';
     }
@@ -70,13 +72,14 @@ async function iniciarSesion() {
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
 
         mostrarMsg(`¡Bienvenido, ${data.usuario.nombre}! Redirigiendo...`, 'exito');
-
         setTimeout(() => {
             const rol = data.usuario.rol;
             if (rol === 'admin') {
                 window.location.href = 'admin.php';
             } else if (rol === 'vendedor') {
                 window.location.href = 'vendedor.php';
+            } else if (rol === 'agente') {
+                window.location.href = 'agente.php'; // <-- AGREGADO
             } else {
                 window.location.href = 'index.php';
             }

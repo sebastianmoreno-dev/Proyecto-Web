@@ -45,7 +45,7 @@ function renderNavbar(paginaActiva = '') {
             </div>
         `;
     } else {
-        // Rutas separadas para vendedor y administrador
+        // Rutas separadas para vendedor, administrador y agente
         let menuExtra = '';
         if (rol === 'comprador') {
             menuExtra = `<a href="favoritos.php" class="sell-link"><i class="fa-solid fa-heart"></i> Favoritos</a>`;
@@ -53,8 +53,10 @@ function renderNavbar(paginaActiva = '') {
             menuExtra = `<a href="vendedor.php" class="sell-link"><i class="fa-solid fa-chart-line"></i> Mi Panel</a>`;
         } else if (rol === 'admin') {
             menuExtra = `<a href="admin.php" class="sell-link"><i class="fa-solid fa-shield-halved"></i> Admin</a>`;
+        } else if (rol === 'agente') {
+            // AQUÍ INTEGRAMOS AL AGENTE EN LA NAVEGACIÓN UNIVERSAL
+            menuExtra = `<a href="agente.php" class="sell-link"><i class="fa-solid fa-briefcase"></i> Panel Agente</a>`;
         }
-
         userHTML = `
             <div class="nav-actions" style="display:flex; align-items:center; gap:20px;">
                 ${menuExtra}

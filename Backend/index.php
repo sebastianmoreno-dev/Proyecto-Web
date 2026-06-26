@@ -19,6 +19,7 @@ require_once 'controllers/PropiedadController.php';
 require_once 'controllers/AdminController.php';
 require_once 'controllers/FavoritoController.php';
 require_once 'controllers/ChatController.php';
+require_once 'controllers/AgenteController.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $url = isset($_GET['url']) ? $_GET['url'] : ltrim($uri, '/');
@@ -70,6 +71,25 @@ if ($urlSegmentos[0] === 'api') {
     }
 
     // Rutas: /api/chats
+    if ($urlSegmentos[0] === 'agentes') {
+        if (!$tokenData || $tokenData['rol'] !== 'agente') { 
+            http_response_code(403); 
+            echo json_encode(["mensaje" => "Acceso restringido a Agentes Inmobiliarios"]); 
+            exit; 
+        }
+        if ($urlSegmentos[1] === 'ventas' && !isset($urlSegmentos[2]) && $metodo === 'GET') {
+            AgenteController::listarVentas($pdo, $tokenData);
+        }
+        if ($urlSegmentos[1] === 'citas' && !isset($urlSegmentos[2]) && $metodo === 'GET') {
+            AgenteController::listarCitas($pdo, $tokenData);
+        }
+        if ($urlSegmentos[1] === 'citas' && isset($urlSegmentos[2]) && $urlSegmentos[3] === 'estado' && $metodo === 'PUT') {
+            AgenteController::actualizarEstadoCita($pdo, $urlSegmentos[2], $body, $tokenData);
+        }
+        if ($urlSegmentos[1] === 'ventas' && !isset($urlSegmentos[2]) && $metodo === 'POST') {
+            AgenteController::registrarVenta($pdo, $body, $tokenData);
+        }
+    }
     if ($urlSegmentos[0] === 'chats') {
         if (!isset($urlSegmentos[1]) && $metodo === 'GET') {
             ChatController::listar($pdo, $tokenData);
