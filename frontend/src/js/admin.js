@@ -1,4 +1,4 @@
-const API = '/Backend/api';
+const API_ADMIN = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 const adminToken = localStorage.getItem('token');
 const adminRol = localStorage.getItem('role') || localStorage.getItem('rol'); // Respaldo por si usas 'role' o 'rol'
 

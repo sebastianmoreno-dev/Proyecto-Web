@@ -6,6 +6,8 @@
 // la BD (trigger / event); aqui solo reflejamos el estado y bloqueamos
 // el input cuando corresponde.
 
+var API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+
 const Chat = (() => {
     let chatActivoId = null;
     let pollInterval = null;

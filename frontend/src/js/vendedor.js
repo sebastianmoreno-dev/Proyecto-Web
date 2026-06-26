@@ -1,4 +1,4 @@
-const API = '/Backend/api';
+var API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 // Protección de acceso: solo vendedores
 requireRol('vendedor', 'admin');
 

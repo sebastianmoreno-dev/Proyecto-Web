@@ -23,9 +23,12 @@
                         <h2>Galería Visual</h2>
                         <span class="requirement-text">MÍNIMO 5 FOTOS</span>
                     </div>
-                    <div class="upload-zone" id="upload-zone">
+                    <div class="upload-zone" id="upload-zone" style="cursor: pointer;">
                         <i class="fa-solid fa-camera-retro"></i>
                         <p><strong>Arrastre sus imágenes aquí</strong></p>
+                        <p style="font-size: 0.9em; color: #666;">o haga clic para seleccionar</p>
+    
+                        <input type="file" id="input-oculto" multiple accept="image/*" style="display: none;">
                     </div>
                     <div class="thumbnails-grid" id="thumbs-grid">
                         <div class="thumbnail empty"><i class="fa-regular fa-image"></i></div>
@@ -45,9 +48,8 @@
                         <div class="form-group flex-1">
                             <label>TIPO DE PROPIEDAD</label>
                             <select id="prop-tipo" class="form-control">
-                                <option value="casa">Casa Unifamiliar</option>
+                                <option value="casa">Casa</option>
                                 <option value="departamento">Departamento</option>
-                                <option value="terreno">Terreno</option>
                             </select>
                         </div>
                     </div>
@@ -60,26 +62,56 @@
                             <label>ÁREA TOTAL (m²)</label>
                             <input type="number" id="prop-area" class="form-control">
                         </div>
+                    </div>
+                    
+                    <div class="form-row">
                         <div class="form-group flex-1">
                             <label>HABITACIONES</label>
                             <div class="counter-input">
-                                <button type="button" id="btn-menos">-</button>
+                                <button type="button" class="btn-menos">-</button>
                                 <input type="number" id="prop-habitaciones" value="0" readonly>
-                                <button type="button" id="btn-mas">+</button>
+                                <button type="button" class="btn-mas">+</button>
+                            </div>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>BAÑOS</label>
+                            <div class="counter-input">
+                                <button type="button" class="btn-menos">-</button>
+                                <input type="number" id="prop-banos" value="0" readonly>
+                                <button type="button" class="btn-mas">+</button>
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label>DESCRIPCIÓN ARQUITECTÓNICA</label>
-                        <textarea id="prop-descripcion" class="form-control" rows="5"></textarea>
+                        <textarea id="prop-descripcion" class="form-control" rows="5" placeholder="Describe los detalles de la propiedad..."></textarea>
                     </div>
                 </section>
             </div>
 
             <div class="right-column">
                 <section class="card form-section">
-                    <h2>Ubicación</h2>
-                    <input type="text" id="prop-ubicacion" class="form-control" placeholder="Calle, Número, Ciudad">
+                    <h2>Ubicación (Alcaldía)</h2>
+                    <select id="prop-ubicacion" class="form-control">
+                        <option value="" disabled selected>Selecciona una alcaldía</option>
+                        <option value="Alvaro Obregon">Álvaro Obregón</option>
+                        <option value="Azcapotzalco">Azcapotzalco</option>
+                        <option value="Benito Juarez">Benito Juárez</option>
+                        <option value="Coyoacan">Coyoacán</option>
+                        <option value="Cuajimalpa">Cuajimalpa de Morelos</option>
+                        <option value="Cuauhtemoc">Cuauhtémoc</option>
+                        <option value="Gustavo A. Madero">Gustavo A. Madero</option>
+                        <option value="Iztacalco">Iztacalco</option>
+                        <option value="Iztapalapa">Iztapalapa</option>
+                        <option value="Magdalena Contreras">La Magdalena Contreras</option>
+                        <option value="Miguel Hidalgo">Miguel Hidalgo</option>
+                        <option value="Milpa Alta">Milpa Alta</option>
+                        <option value="Tlahuac">Tláhuac</option>
+                        <option value="Tlalpan">Tlalpan</option>
+                        <option value="Venustiano Carranza">Venustiano Carranza</option>
+                        <option value="Xochimilco">Xochimilco</option>
+                    </select>
                 </section>
                 <section class="card summary-card">
                     <h2>Resumen de Publicación</h2>
@@ -90,9 +122,10 @@
     </main>
 
     <?php include 'includes/footer.php'; ?>
-
     <script src="js/navbar.js"></script>
     <script src="js/nuevaPropiedad.js"></script>
-    <script>renderNavbar('');</script>
+    <script>
+        renderNavbar('propiedades');
+    </script>
 </body>
 </html>
