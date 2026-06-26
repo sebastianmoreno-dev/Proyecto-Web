@@ -1,50 +1,85 @@
-<?php
-session_start();
-require_once 'includes/conexion.php';
-
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'agente') {
-    header('Location: auth.php');
-    exit;
-}
-
-$stmt = $pdo->prepare("SELECT c.*, pd.prd_titulo FROM cita c 
-                       JOIN negociacion n ON c.id_negociacion = n.id_negociacion
-                       JOIN propiedad p ON n.id_propiedad = p.id_propiedad
-                       JOIN propiedad_datos pd ON p.id_datos = pd.id_datos
-                       WHERE c.id_agente = ?");
-$stmt->execute([$_SESSION['id']]); 
-$citas = $stmt->fetchAll();
-
-$titulo = "Panel Agente - EstateArch";
-include 'includes/head.php';
+<?php 
+    $titulo = "Panel Agente - EstateArch";
+    include 'includes/head.php';
 ?>
 <body>
     <?php include 'includes/header.php'; ?>
+    
     <div class="panel-layout">
-        <aside class="panel-sidebar">
+        <aside class="panel-sidebar" style="background-color: var(--text-dark);">
             <div class="sidebar-user">
-                <div class="s-nombre"><?= htmlspecialchars($_SESSION['nombre']) ?></div>
+                <div class="s-nombre" id="sidebar-nombre">Cargando...</div>
                 <div class="s-rol">AGENTE INMOBILIARIO</div>
             </div>
-            <a href="agente.php" class="sidebar-link active"><i class="fa-solid fa-calendar-check"></i> Mis Citas</a>
-            <a href="includes/logout.php" class="sidebar-link"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a>
+            <button class="sidebar-link active" onclick="mostrarSeccion('citas', this)">
+                <i class="fa-solid fa-calendar-check"></i> Gestión de Citas
+            </button>
+            <button class="sidebar-link" onclick="mostrarSeccion('ventas', this)">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Historial y Comisiones
+            </button>
+            <button class="sidebar-link" onclick="Auth.logout()" style="margin-top:auto;">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
         </aside>
+
         <main class="panel-main">
-            <h1>Mis Citas Programadas</h1>
-            <table class="panel-table">
-                <thead><tr><th>Propiedad</th><th>Fecha</th><th>Hora</th><th>Estatus</th></tr></thead>
-                <tbody>
-                    <?php foreach ($citas as $cita): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($cita['prd_titulo']) ?></td>
-                        <td><?= $cita['cit_fecha'] ?></td>
-                        <td><?= $cita['cit_hora'] ?></td>
-                        <td><?= $cita['id_estatus_cita'] ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div class="panel-header">
+                <h1>Panel Operativo</h1>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Control de negociaciones y transacciones cerradas.</p>
+            </div>
+
+            <div class="panel-section active" id="sec-citas">
+                <h2>Citas Activas y Negociaciones</h2>
+                <table class="panel-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>PROPIEDAD</th>
+                            <th>FECHA</th>
+                            <th>HORA</th>
+                            <th>ESTATUS</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-citas">
+                        <tr><td colspan="5" style="text-align:center;">Cargando citas...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel-section" id="sec-ventas">
+                <h2>Transacciones Concretadas</h2>
+                
+                <div class="stats-row" id="stats-ventas">
+                    <div class="stat-box">
+                        <div class="num" id="total-ventas">0</div>
+                        <div class="lbl">PROPIEDADES VENDIDAS</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="total-comisiones" style="color: #4CAF50;">$0</div>
+                        <div class="lbl">COMISIONES GENERADAS (5%)</div>
+                    </div>
+                </div>
+
+                <table class="panel-table" style="width: 100%; margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>FOLIO</th>
+                            <th>PROPIEDAD</th>
+                            <th>FECHA CIERRE</th>
+                            <th>PRECIO FINAL</th>
+                            <th>TU COMISIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-ventas">
+                        <tr><td colspan="5" style="text-align:center;">Cargando historial...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/agente.js"></script>
+    <script>renderNavbar();</script>
 </body>
 </html>

@@ -10,9 +10,9 @@ function aplicarFiltros() {
 // ── Cargar Propiedades Dinámicamente ─────────────────────────
 async function cargarPropiedades() {
     const grid = document.getElementById('cards-grid');
-    const ubicacion = document.getElementById('filtro-ubicacion').value;
-    const tipo = document.getElementById('filtro-tipo').value;
-    const precio = document.getElementById('filtro-precio').value;
+    const ubicacion = document.getElementById('filtro-ubicacion').value || '';
+    const tipo = document.getElementById('filtro-tipo').value || '';
+    const precio = document.getElementById('filtro-precio').value || '';
 
     // Mostrar estado de carga
     grid.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-gray);grid-column:1/-1;">
@@ -30,11 +30,15 @@ async function cargarPropiedades() {
 
     try {
         const res  = await fetch(url);
-        
-        // Si hay error en el backend, lanzar excepción
-        if (!res.ok) throw new Error("Error al obtener las propiedades");
-        
-        const data = await res.json();
+        const data = await res.json(); // Leemos la memoria JSON antes de juzgar el HTTP status
+
+        // Si PHP mandó un error crítico real y el JSON no tiene propiedades, abortamos
+        if (!res.ok && data.mensaje) {
+            throw new Error(`Servidor: ${res.status} - ${data.mensaje}`);
+        }
+
+        // Normalización: Aseguramos que la data siempre sea un arreglo para que .map() no colapse
+        const arrayData = Array.isArray(data) ? data : [data];
 
         // Si no hay resultados con esos filtros
         if (!data || !data.length) {
@@ -45,23 +49,6 @@ async function cargarPropiedades() {
         }
 
         // Pintar las tarjetas
-        grid.innerHTML = data.map(p => {
-            // 1. Evaluar la imagen: Si es null, vacía, o 'default.jpg', usamos la de Unsplash. 
-            // Si es una foto real, armamos la ruta absoluta hacia tu NUEVA carpeta administrada por PHP.
-            const tieneFotoReal = p.imagen_url && p.imagen_url !== 'default.jpg' && p.imagen_url !== 'null';
-            const rutaFoto = tieneFotoReal 
-                ? `/4CV3/moreseba/Proyecto-Web/frontend/img/${p.imagen_url}` 
-                : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80';
-
-            // 2. Proteger valores nulos para que no se imprima la palabra "null" en el HTML
-            const tituloLimpio = p.titulo || 'Propiedad sin título';
-            const ubicacionLimpia = p.ubicacion || 'Sin ubicación';
-            const tipoLimpio = (p.tipo || 'CASA').toUpperCase();
-            
-            return `
-            <div class="card-prop">
-                <div class="card-image">
-                    <span class="badge">${tipoLimpio}</span>
                     <button class="btn-heart" onclick="toggleFavorito(this, ${p.id})">
                         <i class="fa-solid fa-heart"></i>
                     </button>
@@ -86,7 +73,7 @@ async function cargarPropiedades() {
         console.error("Error al cargar propiedades:", err);
         grid.innerHTML = `<div style="text-align:center;padding:60px;color:#C0392B;grid-column:1/-1;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size:2rem;margin-bottom:15px;display:block;"></i>
-            Verifica que el servidor PHP esté corriendo</div>`;
+            Ocurrió un problema: ${err.message}</div>`;
     }
 }
 
