@@ -1,4 +1,5 @@
 const API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+//const API = '/Backend/api';
 const token = Auth.getToken();
 
 document.addEventListener('DOMContentLoaded', () => {

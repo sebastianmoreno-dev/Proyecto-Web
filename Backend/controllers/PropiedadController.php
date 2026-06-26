@@ -3,7 +3,7 @@
 class PropiedadController {
     
     public static function listar($pdo, $filtros) {
-        // Usamos los nombres exactos que vienen en el PDF y el alias para el área
+        
         $sql = "SELECT 
                     id,
                     titulo,
@@ -16,7 +16,7 @@ class PropiedadController {
                     descripcion,
                     imagen_url
                 FROM vista_propiedades
-                WHERE estado_propiedad = 'activa'"; // Cambiamos el 1=1 por 'activa' para mayor seguridad
+                WHERE estado_propiedad = 'activa'"; 
 
         $params = [];
 

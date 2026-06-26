@@ -1,5 +1,5 @@
 var API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
-
+//var API = '/Backend/api';
 const Auth = {
     getToken:   () => localStorage.getItem('token'),
     getRol:     () => localStorage.getItem('rol'),

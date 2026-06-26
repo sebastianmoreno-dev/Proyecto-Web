@@ -90,6 +90,40 @@
                 </div>
             </div>
         </div>
+
+        <div class="reviews-section card" style="margin-top: 30px; padding: 30px;">
+            <h2 class="section-title-detail" style="margin-bottom: 25px;">Reseñas de la Propiedad</h2>
+            
+            <div id="form-resena-container" style="display: none; background: #F9F9F9; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #EAEAEA;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--primary-green);">Deja tu opinión</h3>
+                <form id="form-resena" onsubmit="enviarResena(event)">
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>CALIFICACIÓN</label>
+                            <select id="res-calificacion" class="form-control" required style="width: 150px;">
+                                <option value="5">5 Estrellas</option>
+                                <option value="4">4 Estrellas</option>
+                                <option value="3">3 Estrellas</option>
+                                <option value="2">2 Estrellas</option>
+                                <option value="1">1 Estrella</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>COMENTARIO</label>
+                        <textarea id="res-comentario" class="form-control" rows="3" required placeholder="Describe tu experiencia con esta propiedad..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btn-enviar-resena">Publicar Reseña</button>
+                </form>
+            </div>
+
+            <div id="lista-resenas">
+                <div style="text-align: center; color: var(--text-gray); padding: 20px;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Cargando reseñas...
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <?php include 'includes/footer.php'; ?>

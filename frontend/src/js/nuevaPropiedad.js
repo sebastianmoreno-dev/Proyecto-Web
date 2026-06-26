@@ -1,4 +1,5 @@
 var API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+//var API = '/Backend/api';
 
 const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 

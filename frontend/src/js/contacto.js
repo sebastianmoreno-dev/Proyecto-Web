@@ -1,6 +1,7 @@
 // ── Función para simular el envío del formulario de contacto ──
 
 const API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+//const API = '/Backend/api';
 function sendMessage() {
     const inputs = document.querySelectorAll('.form-control');
     let valid = true;
