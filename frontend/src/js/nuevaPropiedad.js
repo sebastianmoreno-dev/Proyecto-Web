@@ -2,19 +2,22 @@ var API = '/4CV3/moreseba/Proyecto-Web/Backend/api';
 
 const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-// ── Contadores habitaciones y baños ─────────────────────────
-const inputHab = document.getElementById('prop-habitaciones');
-const inputBan = document.getElementById('prop-banos');
+// ── Contadores automáticos (Habitaciones y Baños) ─────────────────────────
+// Esto busca automáticamente todos los contenedores y les da vida a sus botones
+document.querySelectorAll('.counter-input').forEach(container => {
+    const btnMenos = container.querySelector('.btn-menos');
+    const btnMas = container.querySelector('.btn-mas');
+    const input = container.querySelector('input'); // Encuentra prop-habitaciones o prop-banos
 
-// Botones Habitaciones
-document.getElementById('btn-mas').addEventListener('click',   () => { inputHab.value = parseInt(inputHab.value) + 1; });
-document.getElementById('btn-menos').addEventListener('click', () => { if (parseInt(inputHab.value) > 0) inputHab.value = parseInt(inputHab.value) - 1; });
-
-// Botones Baños (Seleccionamos los botones específicos dentro de ese form-group)
-// Nota: Si tus botones tienen la misma clase, esto tomará el segundo par de botones en el DOM
-const btns = document.querySelectorAll('.counter-input');
-btns[1].querySelector('.btn-mas').addEventListener('click',   () => { inputBan.value = parseInt(inputBan.value) + 1; });
-btns[1].querySelector('.btn-menos').addEventListener('click', () => { if (parseInt(inputBan.value) > 0) inputBan.value = parseInt(inputBan.value) - 1; });
+    if (btnMas && btnMenos && input) {
+        btnMas.addEventListener('click', () => { 
+            input.value = parseInt(input.value) + 1; 
+        });
+        btnMenos.addEventListener('click', () => { 
+            if (parseInt(input.value) > 0) input.value = parseInt(input.value) - 1; 
+        });
+    }
+});
 
 
 // ── Upload de imágenes (Drag & Drop) ─────────────────────────
