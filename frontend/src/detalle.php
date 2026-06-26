@@ -84,7 +84,9 @@
                             <p class="agent-role" id="det-agente-correo">Agente · EstateArch</p>
                         </div>
                     </div>
-                    <a href="contacto.php" class="btn btn-outline w-100" style="display:block; text-align:center;">Contactar Agente</a>
+                    <button onclick="iniciarChat()" class="btn btn-outline w-100" style="display:block; text-align:center;">
+                        <i class="fa-regular fa-comments"></i> Contactar Agente
+                    </button>
                 </div>
             </div>
         </div>
@@ -95,6 +97,56 @@
     <script src="js/detalle.js"></script>
     <script>
         renderNavbar('propiedades');
+
+        // ── LÓGICA PARA CREAR/IR AL CHAT ──
+        async function iniciarChat() {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            const API_URL = '/4CV3/moreseba/Proyecto-Web/Backend/api';
+            
+            // 1. Verificamos que el usuario haya iniciado sesión
+            if (!token) {
+                alert("Debes iniciar sesión para contactar a este agente.");
+                window.location.href = "auth.php";
+                return;
+            }
+
+            // 2. Extraemos el ID de la propiedad directamente de la URL actual
+            const urlParams = new URLSearchParams(window.location.search);
+            const idPropiedad = urlParams.get('id');
+
+            if (!idPropiedad) {
+                alert("Error: No se pudo identificar la propiedad.");
+                return;
+            }
+
+            try {
+                // Le avisamos al backend que queremos abrir un canal de chat
+                const res = await fetch(`${API_URL}/chats`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ id_propiedad: idPropiedad })
+                });
+
+                const data = await res.json();
+                
+                // Buscamos el ID del chat que el backend nos acaba de crear o devolver
+                const idChat = data.id_chat || data.id || '';
+
+                if (idChat) {
+                    // Si tenemos el ID, lo mandamos en la URL para que chat.php lo atrape
+                    window.location.href = `chat.php?chat_id=${idChat}`;
+                } else {
+                    window.location.href = 'chat.php';
+                }
+
+            } catch (error) {
+                console.error("Error al iniciar el chat:", error);
+                window.location.href = 'chat.php';
+            }
+        }
     </script>
 </body>
 </html>
